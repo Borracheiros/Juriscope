@@ -1,0 +1,24 @@
+{
+  "classification": "GREENFIELD",
+  "absolutePath": "E:/TCC/Juridico-IA",
+  "branch": "master",
+  "head": null,
+  "origin": null,
+  "workingTreeBeforeFoundation": "cursor-rules-and-eap-only",
+  "stackChosen": {
+    "language": "TypeScript 5 / Node 22",
+    "api": "NestJS 10",
+    "web": "Next.js 15",
+    "db": "PostgreSQL 16 + pgvector",
+    "monorepo": "npm workspaces",
+    "redis": false,
+    "objectStorage": "deferred-to-sprint-4"
+  },
+  "existingApplications": [],
+  "existingMigrations": [],
+  "existingAuth": null,
+  "existingAi": null,
+  "existingCi": null,
+  "externalIntegrations": [],
+  "realData": false
+}

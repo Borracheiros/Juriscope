@@ -1,0 +1,24 @@
+---
+description: Premissa geral — nunca perguntar quando uma opção está marcada como recommended
+alwaysApply: true
+---
+
+# Escolha automática da opção recomendada
+
+## Premissa (obrigatória)
+
+Quando o agente apresentar (ou internamente considerar) decisões com opções e uma delas estiver marcada como recommended / preferida / recomendada, **não perguntar ao usuário**.
+
+- **Assumir** essa opção imediatamente.
+- **Prosseguir** com implementação, commit/push ou próximo passo conforme o fluxo já combinado.
+- **Não** usar AskQuestion, questionários, nem “confirma?” só para validar a opção recomendada.
+
+## Quando ainda perguntar
+
+Somente se **nenhuma** opção for claramente recomendada **e** a decisão for bloqueante (ambiguidade real, risco destrutivo, ou escolha de produto sem default no contexto).
+
+## Exemplos neste repositório
+
+- Density polish: se o escopo standard for first-fold + details + 1 primary (Recommended) → aplicar sem perguntar.
+- Commit/push por round em main já confirmado no fluxo contínuo → não re-perguntar a cada round.
+- “Prossiga” → continuar o próximo hotspot elegível do census com o padrão density-2, sem menu de confirmação.

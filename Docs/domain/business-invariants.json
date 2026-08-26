@@ -1,0 +1,10 @@
+[
+  { "id": "INV-AI-DEADLINE", "rule": "IA não confirma prazo; extração exige validação humana" },
+  { "id": "INV-AI-CONFLICT", "rule": "IA não marca conflito como CLEARED" },
+  { "id": "INV-FILED", "rule": "Documento protocolado é imutável; nova versão não sobrescreve" },
+  { "id": "INV-CUSTODY", "rule": "Evidência mantém cadeia de custódia" },
+  { "id": "INV-HOLD", "rule": "Legal hold impede exclusão" },
+  { "id": "INV-CONFLICT-ACTOR", "rule": "Decisão de conflito exige ator autorizado" },
+  { "id": "INV-AI-PUBLISH", "rule": "AIArtifact não PUBLICA sem aprovação humana com ator, versão, fontes e momento" },
+  { "id": "INV-MATTER-CLOSED", "rule": "Matéria encerrada não muta sem reabertura governada" }
+]

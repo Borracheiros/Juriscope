@@ -1,0 +1,3 @@
+# DATABASE ARCHITECTURE
+
+Ver `docs/architecture/DATABASE-ARCHITECTURE.md`.

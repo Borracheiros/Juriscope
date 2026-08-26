@@ -1,0 +1,31 @@
+---
+description: Backend architecture — thin controllers, use cases, domain, repositories, auth, tenant isolation, and audit
+globs: "{backend,api,server,apps/api,src/api,src/backend}/**/*.{ts,js,py}"
+alwaysApply: false
+---
+
+# Backend
+
+Use this flow: **controller → use case → domain → repository**.
+
+- Controllers stay thin: parse input, call a use case, map the result to HTTP. No ORM, no business rules.
+- Use cases orchestrate domain logic. They must not talk to HTTP, queues, or raw SQL/ORM APIs.
+- Domain holds entities, value objects, and domain errors. Keep it free of infrastructure.
+- Repositories persist and retrieve only. No business decisions inside them.
+- Services must not mix orchestration with infrastructure (DB clients, HTTP clients, brokers).
+- Catch infrastructure errors at the adapter boundary and map them to application or domain errors. Do not leak ORM/driver exceptions from use cases or controllers.
+
+## Security and tenancy
+
+- Every mutation writes an audit log (actor, action, timestamp, correlation, tenant).
+- Every endpoint requires auth and a permission check unless it is explicitly public.
+- Isolate data by tenant whenever the resource is tenant-scoped. Never query without the tenant constraint.
+
+## Tests
+
+- Add integration tests when the change touches DB, API, queue, or an external service.
+
+```text
+❌ Controller → ORM / business rules
+✅ Controller → UseCase → Domain ← Repository (infra adapter)
+```

@@ -1,0 +1,16 @@
+{
+  "sprints": [
+    { "id": 0, "name": "Fundação", "status": "in_this_delivery" },
+    { "id": 1, "name": "Clientes e partes", "epics": ["registry", "dedup", "consent"] },
+    { "id": 2, "name": "Intake e conflito", "epics": ["intake", "conflict-check", "waiver"] },
+    { "id": 3, "name": "Matérias", "epics": ["matter", "case", "team"] },
+    { "id": 4, "name": "Documentos", "epics": ["upload", "versioning", "legal-hold"] },
+    { "id": 5, "name": "Prazos", "epics": ["docketing", "calendar", "escalation"] },
+    { "id": 6, "name": "Pesquisa", "epics": ["sources", "citations"] },
+    { "id": 7, "name": "IA", "epics": ["gateway", "rag", "human-review"] },
+    { "id": 8, "name": "Evidência", "epics": ["custody", "integrity"] },
+    { "id": 9, "name": "Financeiro", "epics": ["time", "invoice"] },
+    { "id": 10, "name": "Portal", "epics": ["client-docs", "approvals"] },
+    { "id": 11, "name": "Integrações", "epics": ["sandbox", "kill-switch"] }
+  ]
+}

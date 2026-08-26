@@ -1,0 +1,22 @@
+{
+  "name": "@juridico-ia/worker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start:dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@juridico-ia/config": "0.1.0",
+    "@juridico-ia/observability": "0.1.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.5",
+    "tsx": "^4.20.5",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

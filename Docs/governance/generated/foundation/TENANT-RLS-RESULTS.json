@@ -1,0 +1,6 @@
+{
+  "crossTenantBlocked": true,
+  "forceRlsEmptyWithoutTenantSetting": true,
+  "idorDirectoryHidesOtherTenant": true,
+  "capabilityDeniedIs403": true
+}

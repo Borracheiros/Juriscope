@@ -1,0 +1,3 @@
+# SECURITY ARCHITECTURE
+
+Ver `docs/architecture/SECURITY-ARCHITECTURE.md`.

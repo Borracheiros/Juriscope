@@ -1,0 +1,13 @@
+---
+description: Orquestra cada pedido do utilizador para as Agent Skills certas antes de trabalho pesado no repositório.
+alwaysApply: true
+---
+
+# Orquestrador de agentes (sempre ativo)
+
+Em *cada* mensagem do utilizador neste repositório:
+
+1. Aplica o protocolo completo em `.cursor/skills/juridico-ia-orchestrator/SKILL.md` (classificação, skills, ordem, estratégia, patterns).
+2. No início da resposta (antes de plano longo ou código), inclui o bloco *[Orquestrador]* (e [Patterns] quando aplicável), conforme definido nessa skill.
+3. Para entregas faseadas ou prompts com veredito, segue também `.cursor/skills/delivery-workflow/SKILL.md`.
+4. Executa o trabalho *no papel* das skills escolhidas, sem violar `.cursor/rules/`, `AGENTS.md` nem `juridico-ia-dev-and-data.mdc`. *Sem runtime Ruflo* (`npx ruflo init`, MCP swarm, daemon).

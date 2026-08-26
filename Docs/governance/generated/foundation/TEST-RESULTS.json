@@ -1,0 +1,14 @@
+{
+  "typecheck": "pass",
+  "unitAndIntegration": {
+    "api": "4 passed (scratch postgres, RLS, authz, idempotency)",
+    "web": "2 passed (cognitive states)",
+    "worker": "1 passed",
+    "contracts": "2 passed",
+    "domain": "5 passed",
+    "security": "2 passed"
+  },
+  "secretScan": "pass (allowlist: synthetic fixture passwords)",
+  "npmAuditCritical": "pass (0 critical)",
+  "npmAuditHighResidual": ["multer via nest platform-express (unused upload)", "postcss via next"]
+}

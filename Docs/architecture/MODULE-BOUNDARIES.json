@@ -1,0 +1,8 @@
+{
+  "apps": ["web", "api", "worker"],
+  "packages": ["domain", "contracts", "design-system", "security", "observability", "testing", "config"],
+  "platformModules": ["identity", "tenancy", "authorization", "audit", "idempotency", "workflow", "files", "search", "notifications", "observability", "feature-flags", "model-gateway", "data-governance"],
+  "legalModules": ["client-party-registry", "legal-intake", "conflict-check", "matter-case-management", "deadlines-docketing", "tasks-workflows", "documents", "evidence-chain-of-custody", "legal-research", "legal-knowledge", "contracts", "timekeeping", "billing", "client-portal", "ai-work-product"],
+  "integrationRule": "modules do not import foreign repositories; use ports/events",
+  "implementedNow": ["identity", "tenancy-rls", "authorization-capabilities", "audit", "idempotency", "outbox"]
+}

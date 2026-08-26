@@ -1,0 +1,6 @@
+{
+  "workflow": ".github/workflows/ci.yml",
+  "steps": ["npm ci", "typecheck", "test", "secret-scan", "audit:deps"],
+  "localRun": "equivalent commands executed 2026-08-26",
+  "deploy": "NOT_EXECUTED"
+}

@@ -1,0 +1,12 @@
+{
+  "lawyer": ["client:read", "client:write", "matter:create", "matter:manage", "conflict:request", "document:upload", "document:review", "deadline:create", "ai:generate", "ai:review", "audit:read"],
+  "paralegal": ["client:read", "client:write", "matter:create", "conflict:request", "document:upload", "document:review", "deadline:create", "ai:generate"],
+  "legal_assistant": ["client:read", "document:upload", "deadline:create"],
+  "intake": ["client:read", "client:write", "conflict:request"],
+  "conflict_reviewer": ["client:read", "conflict:request", "conflict:review", "conflict:waive"],
+  "billing": ["client:read", "billing:read", "billing:adjust"],
+  "knowledge_manager": ["ai:generate", "ai:review"],
+  "tenant_admin": ["client:read", "client:write", "matter:manage", "admin:manage", "audit:read"],
+  "readonly": ["client:read", "billing:read", "audit:read"],
+  "client_portal": ["client:read", "document:review"]
+}

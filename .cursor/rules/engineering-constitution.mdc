@@ -1,0 +1,69 @@
+---
+description: Engineering constitution — architecture, security, auditability, testing, and delivery standards
+alwaysApply: true
+---
+
+# Engineering Constitution
+
+Prefer simplicity, correctness, maintainability, security, and auditability over speed of coding. No hidden magic, implicit side effects, or unnecessary abstractions. Preserve architectural boundaries. Explain trade-offs for non-trivial changes. Favor explicit contracts, strong typing, and predictable behavior.
+
+## Planning
+
+For any change that spans multiple files or modules, start with a short plan: impacted layers, risks, migrations, tests, observability, and rollback. Read existing code and patterns before editing.
+
+## Architecture
+
+Layered boundaries: **presentation → application → domain → infrastructure**.
+
+- Domain rules do not live in controllers, UI, or repositories.
+- DTOs at boundaries; domain objects internally.
+- Keep use cases explicit. Respect module ownership and bounded contexts.
+
+## Object-oriented design
+
+- Composition over inheritance. Small cohesive classes. One reason to change per class or module.
+- Encapsulate invariants in entities and value objects.
+- No god services or utility dumping grounds.
+
+## Backend
+
+- TypeScript strict mode. Validate all inputs at boundaries.
+- AuthN + AuthZ on every endpoint unless explicitly public.
+- Every write is auditable.
+- External integrations need timeout, retry, and error mapping.
+- DB changes need migration, rollback notes, and tests.
+
+## Frontend
+
+- Typed APIs and schema validation. Presentational components where possible.
+- Do not duplicate backend business-critical logic.
+- Reusable UI primitives over ad hoc copies.
+- Handle loading, empty, error, and success states explicitly.
+- Accessibility is mandatory for forms, dialogs, tables, and navigation.
+
+## Security
+
+- Never hardcode secrets. Apply least privilege. Sanitize inputs and escape outputs where required.
+- Flag eval, dynamic code execution, unsafe SQL, insecure deserialization, or weak crypto.
+- Call out security impact for auth, permissions, billing, healthcare, finance, PII, and tenant isolation.
+
+## Auditing and observability
+
+Critical mutations must record: actor, action, entity, entity_id, timestamp, correlation_id, and before/after when applicable.
+
+- Structured logs on critical flows. Traceability across API, queue, and DB.
+- Never log secrets or sensitive payloads without masking.
+
+## Testing
+
+Add or update tests for every meaningful change.
+
+- Domain logic → unit tests
+- Repositories and integrations → integration tests
+- Critical user flow → e2e tests
+
+Do not mark work complete without passing relevant tests, lint, and typecheck.
+
+## Delivery
+
+After implementation, provide: changed-files summary, risk summary, validation commands, and a suggested conventional commit message.

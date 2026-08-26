@@ -1,0 +1,21 @@
+---
+description: Frontend architecture — pages orchestrate, feature folders, typed hooks, schema validation, a11y, and UI states
+globs: "{frontend,web,apps/web,apps/frontend,src}/**/*.{ts,tsx,js,jsx,css}"
+alwaysApply: false
+---
+
+# Frontend
+
+- Pages orchestrate (data, permissions, routing). Components render.
+- Organize by feature folders, not by technical type alone.
+- Shared components must be generic, reusable, and documented. Prefer design-system or shared primitives over one-off visuals.
+- Validate forms and API responses with schemas. Prefer typed hooks and typed service layers.
+- Avoid deeply coupled state. Keep state local unless multiple features truly share it.
+- Handle loading, empty, error, and success states explicitly on every data-backed view.
+- Accessibility is mandatory for forms, dialogs, tables, and navigation.
+- Do not duplicate backend business rules that can drift (authorization, pricing, eligibility, legal calculations). The UI may reflect them; the backend remains the source of truth.
+
+```text
+❌ Page with ORM-like logic and ad hoc styles
+✅ Page → typed hook/service → presentational components + schema validation
+```

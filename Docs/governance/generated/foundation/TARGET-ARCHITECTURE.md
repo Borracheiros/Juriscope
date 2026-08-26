@@ -1,0 +1,3 @@
+# TARGET ARCHITECTURE
+
+Ver `docs/architecture/TARGET-ARCHITECTURE.md`.

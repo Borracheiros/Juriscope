@@ -1,0 +1,44 @@
+---
+description: Constituição arquitetural — Enterprise Operational Governance Platform (filtro obrigatório antes de Phase 41+)
+alwaysApply: true
+---
+
+# Juridico-IA — Master Governance (constituição)
+
+## Missão
+
+Evoluir **incrementalmente** para um **Enterprise Operational Governance OS** — não ERP, não BI, não BPM isolado, não graph DB, não microservices.
+
+## Sempre
+
+- backend-first, governance-first, runtime-first, operational-first
+- derived-state-first (PostgreSQL, projeções, MVs, resolvers)
+- context-driven, telemetry-aware, auditability-first
+- zero fake data, zero shadow systems, zero duplicação de governança/RBAC/contexto
+
+## Nunca (sem aprovação explícita)
+
+- novo Source of Truth paralelo
+- reescrita de módulos legados
+- engines genéricas / orchestration exagerada
+- dashboards ou AI decorativos
+- bypass RLS, bypass RBAC, impersonation
+- Phase 41+ enquanto hardening da fase corrente (ex.: 40K) não estiver **validado**
+
+## Gate de decisão
+
+Antes de implementar, responder:
+
+> “Isso aproxima o Juridico-IA de um OS enterprise operacional governado por contexto, execução, telemetria e governança contínua?”
+
+Se **não** → não implementar.
+
+## Entrega mínima (artefatos)
+
+Objetivo arquitetural, impactos (governança, runtime, telemetry, UX, workforce, reconciliation), riscos, estratégia incremental, compatibilidade legado, migrations/APIs/guards, RBAC/RLS, testes, rollout, rollback.
+
+## Sequência atual (2026)
+
+1. **Fechar 40J/40K** (platform admin hardening, grants explícitos, menu/E2E, readiness)
+2. Documentar roadmap 41+
+3. Primeiro incremento 41: Governance State Engine V1 **read-only** (ou equivalente derivado)

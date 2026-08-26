@@ -1,0 +1,20 @@
+---
+description: PR review — reject or flag missing tests, migrations, audit, secrets, duplicated rules, and broken layer boundaries
+alwaysApply: false
+---
+
+# PR Review
+
+Reject or flag a PR when any of the following is true:
+
+- Backend changed with no tests
+- Auth or permission logic changed with no security tests
+- Schema changed with no migration
+- Critical mutation changed with no audit or logging review
+- Duplicated business logic introduced
+- Large refactor shipped without a plan
+- `TODO` or `FIXME` added without an issue reference
+- Secrets, tokens, keys, or credentials appear in code or config
+- Boundaries between layers were broken without strong justification
+
+Do not approve with a critical gap open. Use honest verdicts: the change is blocked until the missing test, migration, audit, or justification is present.

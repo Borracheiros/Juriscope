@@ -1,0 +1,26 @@
+[
+  {
+    "id": "R-001",
+    "level": "high",
+    "title": "Rules copiadas de outro produto (saúde)",
+    "mitigation": "Código e ADRs seguem domínio jurídico; revisar rules em ciclo posterior"
+  },
+  {
+    "id": "R-002",
+    "level": "medium",
+    "title": "Sem Redis/object storage nesta fundação",
+    "mitigation": "Módulos files/search/model-gateway apenas esqueleto"
+  },
+  {
+    "id": "R-003",
+    "level": "high",
+    "title": "IA ainda sem gateway real",
+    "mitigation": "Proibido chamar provedor externo; Sprint 7"
+  },
+  {
+    "id": "R-004",
+    "level": "medium",
+    "title": "Sessão JWT em cookie sem MFA/SSO",
+    "mitigation": "MFA-ready/SSO-ready apenas estrutural"
+  }
+]
