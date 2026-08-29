@@ -5,14 +5,14 @@ alwaysApply: true
 
 # Português — variante obrigatória: Brasil (pt-BR)
 
-- Todo o texto em português deste repositório (UI, `frontend/app/i18n/locales/*.json`, mensagens de erro, documentação interna quando em PT) deve seguir **português brasileiro**, não português de Portugal.
+- Todo o texto em português deste repositório (UI em `apps/web/**`, mensagens de erro, documentação interna quando em PT) deve seguir **português brasileiro**, não português de Portugal.
 - Respostas do assistente ao usuário neste projeto: **português do Brasil**, salvo pedido explícito em outra variante.
 
 ## Preferências lexicais (exemplos)
 
-| Evitar (pt-PT) | Usar (pt-BR) |
-|----------------|--------------|
-| utente, doente (no discurso clínico/administrativo) | paciente |
+| Evitar (pt-PT / herdado) | Usar (pt-BR) |
+|--------------------------|--------------|
+| utente, doente (vocabulário clínico herdado) | cliente, parte, assistido |
 | contacto, connosco | contato, conosco |
 | utilizador(es) | usuário(s) |
 | registo / registado | registro / registrado |
@@ -30,4 +30,5 @@ alwaysApply: true
 
 ## i18n
 
-- Arquivos: `pt-public.json` (merge → `pt.json` com `node frontend/app/i18n/scripts/merge-pt.mjs`), `pt-core.json`, etc. — manter **terminologia e pronomes** coerentes com pt-BR em toda a camada pública e autenticada.
+- Preferir locales sob `apps/web/**` (quando existirem). Manter terminologia e pronomes coerentes com pt-BR.
+- Não assumir scripts ou paths de merge de outro projeto; usar o que existir no monorepo atual.

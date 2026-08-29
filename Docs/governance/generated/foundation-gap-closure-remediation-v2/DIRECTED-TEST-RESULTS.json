@@ -1,0 +1,92 @@
+{
+  "commands": [
+    {
+      "name": "secret-scan",
+      "command": "npm run secret-scan",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T22:26:35-03:00",
+      "exitCode": 0,
+      "durationMsIncludedIn": 910,
+      "output": "secret-scan: ok",
+      "hits": 0
+    },
+    {
+      "name": "secret-scan:test",
+      "command": "npm run secret-scan:test",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T22:26:35-03:00",
+      "exitCode": 0,
+      "output": "secret-scan tests: ok",
+      "positives": {
+        "sql-password": "asserted true on CREATE ROLE with SQL PASSWORD single-quoted literal fixture",
+        "pg-url-credentials": "asserted true on PostgreSQL DSN embedding user and password before host",
+        "generic-secret": "asserted true on quoted password assignment fixture",
+        "env-example-path": "same SQL PASSWORD fixture scanned under .env.example label"
+      },
+      "negatives": {
+        "passwordLessUrl": "role-only PostgreSQL URL without embedded password → 0 pg-url-credentials hits",
+        "allowlistBlock": "delimited SYNTHETIC_PASSWORD block → 0 hits",
+        "repositoryClean": "scanRepository(root) → 0 hits"
+      }
+    },
+    {
+      "name": "typecheck",
+      "command": "npm run typecheck",
+      "startedAt": "2026-08-26T22:26:35-03:00",
+      "exitCode": 0,
+      "durationMs": 18806
+    },
+    {
+      "name": "api-test",
+      "command": "npm run test -w @juridico-ia/api",
+      "startedAt": "2026-08-26T22:27:03-03:00",
+      "exitCode": 0,
+      "durationMs": 24116,
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "notes": "Testcontainers pgvector/pgvector:pg16; no skips"
+    },
+    {
+      "name": "worker-test",
+      "command": "npm run test -w @juridico-ia/worker",
+      "startedAt": "2026-08-26T22:27:27-03:00",
+      "exitCode": 0,
+      "durationMs": 4266,
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "notes": "Testcontainers; outbox effect/dual-worker/retry/lease/FAILED_PERMANENT"
+    },
+    {
+      "name": "git-diff-check",
+      "command": "git diff --check",
+      "startedAt": "2026-08-26T22:27:32-03:00",
+      "exitCode": 0,
+      "notes": "LF/CRLF normalization warnings only; no whitespace errors"
+    }
+  ],
+  "priorFailureBeforeFix": {
+    "secret-scan": {
+      "exitCode": 1,
+      "hits": [
+        "sql-password in Docs/governance/generated/foundation-gap-closure-remediation/CREDENTIALS-AND-SECRET-SCAN.md",
+        "pg-url-credentials in same file",
+        "after CREDENTIALS fix: sql-password in Docs/audits/.../FINDINGS.md"
+      ]
+    }
+  },
+  "migration": {
+    "id": "20260826120000-init",
+    "checksumSha256": "2a5245d95497f96652472fc9d34b3586a351cb8272e40e75c9832199f067dcfc",
+    "schemaFingerprintSha256": "121130f7484e7786f024684c7b39fdcc780a43cbc4dc04e2d5071032f46e70c8",
+    "sqlBytes": 11479,
+    "changedInThisV2": false
+  },
+  "scratchCleanup": {
+    "dockerPsFilter": "pgvector/pgvector:pg16",
+    "leftoverContainers": []
+  }
+}

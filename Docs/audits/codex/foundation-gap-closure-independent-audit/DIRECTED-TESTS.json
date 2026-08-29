@@ -1,0 +1,40 @@
+{
+  "executedAt": "2026-08-26",
+  "commands": [
+    {
+      "command": "npm run test -w @juridico-ia/config",
+      "exitCode": 0,
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm run test -w @juridico-ia/api",
+      "exitCode": 1,
+      "tests": 10,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 10,
+      "error": "Could not find a working container runtime strategy"
+    },
+    {
+      "command": "npm run test -w @juridico-ia/worker",
+      "exitCode": 1,
+      "tests": 1,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 1,
+      "error": "Could not find a working container runtime strategy"
+    },
+    {
+      "command": "npm run secret-scan",
+      "exitCode": 0,
+      "result": "scanner reports clean, but scope misses versioned SQL role passwords and skips .env.example"
+    }
+  ],
+  "sharedDatabaseUsed": false,
+  "externalProvidersCalled": false,
+  "syntheticDataCreated": false,
+  "cleanup": "NOT_APPLICABLE"
+}

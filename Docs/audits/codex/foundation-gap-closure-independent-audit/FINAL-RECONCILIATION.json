@@ -1,0 +1,17 @@
+{
+  "baseline": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "head": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "workingTree": "DIRTY gap-closure delta",
+  "verdict": "JURIDICO_IA_FOUNDATION_CODEX_AUDIT_FAILED_WITH_ACTIONABLE_EVIDENCE",
+  "firstDivergentContract": "Outbox event is marked PUBLISHED without a handler or processed effect",
+  "blockingFindings": ["P0-01", "P1-01", "P1-02"],
+  "nonBlockingFindings": ["P2-01", "P2-02"],
+  "productCodeChangedByCodex": false,
+  "commit": "NOT_EXECUTED",
+  "push": "NOT_EXECUTED",
+  "deploy": "NOT_EXECUTED",
+  "Sprint1": "NOT_STARTED",
+  "externalProvidersCalled": false,
+  "sharedDatabaseUsed": false,
+  "realLegalDataUsed": false
+}

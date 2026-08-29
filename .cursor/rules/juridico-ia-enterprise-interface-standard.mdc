@@ -1,58 +1,54 @@
 ---
-description: Enterprise UX Interface Standard mandatory for Juridico-IA UI work
-globs: frontend/app/**/*,frontend/ui/**/*,frontend/lib/**/*,frontend/e2e/**/*,Docs/products/**/*.md,Docs/one-rfc/**/*.md,Docs/governance/JURIDICO-IA-ENTERPRISE-INTERFACE-STANDARD-1.md,Docs/governance/generated/enterprise-interface-standard-1/**/*,Docs/governance/generated/rfc015/**/*,scripts/governance/juridico-ia-enterprise-interface-standard-check.cjs,scripts/governance/rfc015-s6*.cjs
+description: Padrão de interface cognitiva jurídica — Mission Control, Cockpit, Decision Workspace
+globs: apps/web/**/*,Docs/governance/TCC-RULES-SKILLS-ALIGNMENT.md,Docs/EAP-Gestao-Projeto-Inteligent-Juridico.md
 alwaysApply: false
 ---
 
-# ENTERPRISE INTERFACE STANDARD — MANDATORY
+# Interface cognitiva jurídica — obrigatória em UI
 
-Canon: `JURIDICO_IA_ENTERPRISE_INTERFACE_STANDARD_1_CANONICAL`
+Canon operacional: superfícies EAP **1.5.4–1.5.6** e premissas de frontend. **Não** exige documentos canônicos externos inexistentes.
 
-Normative integral text: `Docs/governance/JURIDICO-IA-ENTERPRISE-INTERFACE-STANDARD-1.md`
+## Superfícies
 
-Mirrors (byte-identical): `Docs/products/JURIDICO-IA/enterprise-interface-standard/` · `Docs/one-rfc/shared/enterprise-interface-standard/`
+| Superfície | EAP | Propósito |
+|------------|-----|-----------|
+| Legal Mission Control | 1.5.4 | Priorizar missões; motivo, origem, próxima ação |
+| Client & Matter Cockpit | 1.5.5 | Contexto consolidado autorizado do cliente/assunto |
+| Legal Decision Workspace | 1.5.6 | Decisão delimitada com **confirmação humana** |
 
-## Premissa
+## Premissas de UX
 
-Antes de qualquer alteração de UI/UX neste repositório sob os globs desta regra, **ler o padrão canônico integral**.
+- Uma composição clara por viewport; **1 CTA dominante**
+- Progressive disclosure (detalhe sob demanda)
+- Backend NestJS como fonte da verdade; UI não inventa autorização
+- Estados distintos: `loading` | `empty` | `not_collected` | `stale` | `partial` | `forbidden` | `error` | `invalid_contract` | `ready`
+- LGPD, privilégio jurídico e acessibilidade (login, shell, formulários, tabelas, diálogos)
+- Diferenciar fatos registrados, inferências e sugestões de IA
+- IA: exibir **fonte** ou declarar **insuficiência**; nunca publicar sem humano
 
-Toda interface Juridico-IA segue a linguagem canônica (shell claro, menu branco, hierarquia cognitiva, **1 CTA dominante**, progressive disclosure, cores semânticas, estados completos, backend SoT). Adaptar à missão da tela — **nunca** copiar layout de outro módulo. Proibido Design System / shell / SoT paralelo e fake data operacional.
+## Paths
 
-## Entrega mínima obrigatória (pacote de fase UI)
-
-```text
-standardId=JURIDICO_IA_ENTERPRISE_INTERFACE_STANDARD_1_CANONICAL
-canonicalComplianceMatrix=present
-exceptionDecisionRecord=present|null (exceção só com Decision Record)
-preferCanonicalComponents=true
-singleDominantCta=true
-progressiveDisclosure=true
-statesDistinct=loading|empty|not_collected|stale|partial|forbidden|error|invalid_contract (conforme aplicável)
-responsiveProven=true
-locales=pt-BR|en-US|fr-FR
-accessibilityProven=true
-permissionAware=true
-phiInTelemetryOrEvidence=false
-visualEvidenceSelfApproved=false
-fallbackRollbackProven=true|applicable
-maturityNotInflated=true
-independentVisualStatus=PENDING|APPROVED (nunca autoApproved)
-humanValidation=false|true (nunca inventar)
-```
-
-## Preferências técnicas
-
-- Preferir exports em `frontend/app/components/enterprise-ux/canonical.ts` e `frontend/app/components/enterprise/*` antes de criar componente novo
-- Shell: `PrivateDashboardLayout` + tokens `--color-sidebar-*` / `--surface-*`
-- Destinos allowlisted; return-context seguro; `requestId` só em disclosure de suporte
-- Flag de UX fail-closed e default off quando feature-gated
-- 403/500/timeout ≠ empty; stale ≠ ready; forbidden ≠ empty
+Trabalhar em `apps/web/**`. Não usar `frontend/` legado.
 
 ## Proibições
 
-- `autoApproved=true` em evidência visual
-- Declarar C19/C20 MET / `S6_APPROVED` / Final Gate sem pacote independente
-- Iniciar RFC-016 a partir de polish de interface sem autorização explícita
-- Expor PHI/UUIDs/`requestId` na linguagem principal da UI
+- Fake data operacional em telas “prontas”
+- Mascarar 403/500 como lista vazia
+- Expor PII desnecessária, documento privilegiado, tokens ou UUIDs internos na linguagem principal
+- Declarar superfície cognitiva “entregue” sem critérios EAP e evidência de teste
+- Ampliar para FutureScope (financeiro, portal, integrações reais) sem autorização explícita
 
-Verificador mecânico: `node scripts/governance/juridico-ia-enterprise-interface-standard-check.cjs`
+## Entrega mínima (fase UI)
+
+```text
+eapCodes=1.5.4|1.5.5|1.5.6 (conforme escopo)
+singleDominantCta=true
+progressiveDisclosure=true
+statesDistinct=true
+humanConfirmationOnDecisionOrAi=true
+backendSoT=true
+accessibilityBasic=true
+localesPrefer=pt-BR
+forbiddenAsEmpty=false
+visualEvidenceSelfApproved=false
+```

@@ -1,0 +1,40 @@
+{
+  "image": "pgvector/pgvector:pg16",
+  "imageId": "ccc6e83d6e35",
+  "engine": "Testcontainers GenericContainer",
+  "initialEmptyProof": {
+    "query": "SELECT count(*)::int AS n FROM information_schema.tables WHERE table_schema='public'",
+    "expected": 0,
+    "suite": "apps/api/test/foundation.test.ts beforeAll"
+  },
+  "migration": {
+    "id": "20260826120000-init",
+    "checksumSha256": "8cf66034c8a0765ba54ccad6c9010cfacb3fdbe4d5bef7ccd278fd3ede64a3e7",
+    "schemaFingerprintSha256": "8bbc0ab185a15d2952f319908688542634e373067996c6ac40f072e39e093c8e",
+    "sqlBytes": 9876,
+    "firstRunPendingAfter": 0,
+    "secondRunApplied": [],
+    "pendingCountAfterSecond": 0,
+    "checksumMismatch": "UPDATE schema_migrations SET checksum = 64 zeros then runMigrations throws MigrationChecksumError; checksum restored"
+  },
+  "extensions": ["pgcrypto", "vector (pgvector)"],
+  "roles": {
+    "juridico_app": "NOSUPERUSER NOBYPASSRLS LOGIN",
+    "juridico_worker": "NOSUPERUSER NOBYPASSRLS LOGIN",
+    "ownerMigrator": "juridico (DATABASE_URL only)"
+  },
+  "grants": {
+    "audit_events": "juridico_app SELECT, INSERT; REVOKE UPDATE, DELETE",
+    "outbox_events": "juridico_app SELECT, INSERT; worker mutates via SECURITY DEFINER functions"
+  },
+  "constraints": {
+    "memberships_user_tenant": "FOREIGN KEY (user_id, tenant_id) REFERENCES users (id, tenant_id)",
+    "memberships_profile_tenant": "FOREIGN KEY (profile_id, tenant_id) REFERENCES access_profiles (id, tenant_id)",
+    "crossTenantMembershipInsert": { "sqlstate": "23503", "proven": true }
+  },
+  "rollback": "Documented only. No destructive migration revert executed. Checksum mismatch fails closed without re-applying SQL.",
+  "risks": [
+    "INIT is a single large migration; edit-in-place of applied SQL is blocked by checksum",
+    "SECURITY DEFINER functions run as owner — GRANT EXECUTE is the control plane"
+  ]
+}

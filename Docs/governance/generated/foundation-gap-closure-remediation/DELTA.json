@@ -1,0 +1,41 @@
+{
+  "closed": [
+    {
+      "id": "P0-01",
+      "title": "Outbox PUBLISHED without effect",
+      "fix": "Explicit dispatcher/handlers; SessionHeartbeat writes outbox_effects via SECURITY DEFINER; complete_outbox only after handler success; claim respects backoff locked_until; reclaim expired PROCESSING leases",
+      "tests": "apps/worker/test/outbox.test.ts (5) — dual worker single effect, handler fail, FAILED_PERMANENT, lease reclaim, retry; orphan PUBLISHED without effect asserted = 0"
+    },
+    {
+      "id": "P1-01",
+      "title": "Literal passwords in versioned SQL",
+      "fix": "Migration creates role shells without PASSWORD; docker/postgres/init-roles.sh uses psql -v secrets from env; scratch generates ephemeral passwords via URL API; .env.example uses password-less URL shapes",
+      "files": [
+        "apps/api/src/database/migrations.ts",
+        "apps/api/src/database/provision-roles.ts",
+        "packages/testing/src/index.ts",
+        "docker/postgres/init-roles.sh",
+        "docker-compose.yml",
+        ".env.example"
+      ]
+    },
+    {
+      "id": "A25/secret-scan",
+      "title": "Scanner gaps",
+      "fix": "Scans .env.example; detects sql-password and pg-url-credentials; allowlist only SECRET_SCAN_ALLOW_SYNTHETIC_BEGIN/END; scripts/secret-scan.test.cjs positive+negative+repo clean"
+    },
+    {
+      "id": "P2-01",
+      "title": "Shallow audit sanitize",
+      "fix": "sanitizeMetadata recursive for objects/arrays; omits password/token/cookie/secret/prompt/authorization/cpf at any depth",
+      "tests": "apps/api/src/modules/platform/audit/audit.repository.test.ts"
+    }
+  ],
+  "migration": {
+    "id": "20260826120000-init",
+    "checksumSha256": "2a5245d95497f96652472fc9d34b3586a351cb8272e40e75c9832199f067dcfc",
+    "schemaFingerprintSha256": "121130f7484e7786f024684c7b39fdcc780a43cbc4dc04e2d5071032f46e70c8",
+    "sqlBytes": 11479,
+    "note": "INIT SQL changed in this remediation (roles without password, outbox_effects, claim/backoff). Fresh scratch applies new checksum; no applied production DB in this round."
+  }
+}

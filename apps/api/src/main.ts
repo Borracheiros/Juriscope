@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { loadEnv } from "@juridico-ia/config";
+import { loadApiEnv } from "@juridico-ia/config";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import type { NextFunction, Request, Response } from "express";
@@ -9,7 +9,7 @@ import { CorrelationMiddleware } from "./http/correlation.middleware";
 import { structuredLog } from "@juridico-ia/observability";
 
 async function bootstrap() {
-  const env = loadEnv(process.env);
+  const env = loadApiEnv(process.env);
   const app = await NestFactory.create(AppModule, { logger: ["error", "warn"] });
   app.setGlobalPrefix("v1");
   app.use(cookieParser());

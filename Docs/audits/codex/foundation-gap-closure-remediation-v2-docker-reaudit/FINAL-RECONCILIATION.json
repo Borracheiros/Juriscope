@@ -1,0 +1,15 @@
+{
+  "phase": "FOUNDATION-GAP-CLOSURE-REMEDIATION-V2-DOCKER-REAUDIT",
+  "verdict": "JURIDICO_IA_FOUNDATION_CODEX_REAUDIT_APPROVED_WITH_RESIDUAL_DEPENDENCY_RISK",
+  "baselineHead": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "workingTree": "DIRTY",
+  "criteria": { "total": 30, "met": 30, "partial": 0, "failed": 0, "notProven": 0 },
+  "gapsClosed": [
+    "G-01: independent PostgreSQL-backed API and worker execution",
+    "G-02: append-only evidence handling in this re-audit"
+  ],
+  "tests": { "api": { "passed": 12, "skipped": 0 }, "worker": { "passed": 5, "skipped": 0 } },
+  "dependencyRisk": { "critical": 0, "high": 3, "moderate": 10, "accepted": false, "remediationRequiresBreakingUpgrades": true },
+  "migrations": { "changedByReaudit": 0 },
+  "controls": { "commit": "NOT_EXECUTED", "push": "NOT_EXECUTED", "deploy": "NOT_EXECUTED", "Sprint1": "NOT_STARTED" }
+}

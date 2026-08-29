@@ -1,0 +1,21 @@
+{
+  "sameTransaction": "insertAudit + insertOutbox inside withTenantTx of heartbeat",
+  "rollbackOrphanProof": {
+    "test": "rolls back outbox with domain",
+    "steps": "BEGIN INSERT outbox_events event_type=X; ROLLBACK; count=0"
+  },
+  "claim": {
+    "mechanism": "FOR UPDATE SKIP LOCKED inside app_private.claim_outbox",
+    "leaseSeconds": 30,
+    "attemptCount": "incremented on claim",
+    "maxAttempts": 8,
+    "terminal": "FAILED_PERMANENT",
+    "dlq": "DEFERRED — no broker; terminal status is safe (no infinite loop)"
+  },
+  "twoWorkers": {
+    "test": "apps/worker/test/outbox.test.ts",
+    "result": "processOnce(w1)+processOnce(w2) === 1; PUBLISHED count 1"
+  },
+  "payload": { "contents": "{ auditId }", "noDocument": true, "noSecret": true },
+  "tenantAndCorrelation": "outbox_events.tenant_id and correlation_id columns preserved"
+}

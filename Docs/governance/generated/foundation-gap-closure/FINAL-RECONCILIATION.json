@@ -1,0 +1,28 @@
+{
+  "phase": "FOUNDATION-GAP-CLOSURE",
+  "intent": "Close independent Codex audit findings on Foundation/Sprint 0 and prove A01–A30 with reproducible commands.",
+  "baseline": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "finalHead": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "workingTree": "DIRTY (gap-closure product, tests, tooling, governance; uncommitted)",
+  "productCodeChanged": true,
+  "commit": "NOT_EXECUTED",
+  "push": "NOT_EXECUTED",
+  "deploy": "NOT_EXECUTED",
+  "Sprint1": "NOT_STARTED",
+  "externalProvidersCalled": false,
+  "sharedDatabaseUsed": false,
+  "realLegalDataUsed": false,
+  "acceptance": { "MET": 30, "PARTIAL": 0, "FAIL": 0, "NOT_PROVEN": 0 },
+  "cursorVerdict": "JURIDICO_IA_FOUNDATION_GAP_CLOSURE_READY_FOR_INDEPENDENT_AUDIT",
+  "cursorCannotSelfApprove": true,
+  "residuals": [
+    "3 npm audit high (multer via Nest 10, postcss via Next 15); majors not applied",
+    "Outbox DLQ/broker deferred; FAILED_PERMANENT is terminal",
+    "Office/team authorization out of scope",
+    "No browser E2E",
+    "JWT still 8h lifetime; grants revalidated from DB each request (not session-version tokens)",
+    "Worker tests import API migrator (production worker does not)"
+  ],
+  "syntheticData": ["escritorio-alpha", "escritorio-beta", "lawyer.alpha@example.test", "lawyer.beta@example.test"],
+  "cleanup": "Testcontainers stop; docker ps shows no leftover pgvector:pg16 containers"
+}

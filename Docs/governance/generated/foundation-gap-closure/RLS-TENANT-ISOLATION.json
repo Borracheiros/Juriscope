@@ -1,0 +1,21 @@
+{
+  "roleUsed": "juridico_app via DATABASE_APP_URL",
+  "forceRlsUsers": true,
+  "rolsuper": false,
+  "rolbypassrls": false,
+  "syntheticTenants": {
+    "A": { "slug": "escritorio-alpha", "id": "11111111-1111-4111-8111-111111111111" },
+    "B": { "slug": "escritorio-beta", "id": "22222222-2222-4222-8222-222222222222" }
+  },
+  "proofs": [
+    { "id": "A08", "case": "A reads A", "result": "GET /v1/audit and directory as Alpha see only alpha emails", "http": 200 },
+    { "id": "A09", "case": "A does not read B", "result": "audit id overlap false; directory emails do not contain beta", "http": 200 },
+    { "id": "A10", "case": "A does not write B", "result": "UPDATE/DELETE userB rowCount 0; INSERT tenant B from context A rejects", "sqlstate": "42501|23514|23503" },
+    { "id": "A11", "case": "tenant in header/query/body rejected", "result": "403 on x-tenant-id, ?tenantId=, body.tenantId", "http": 403 },
+    { "id": "A12", "case": "no tenant context", "result": "SELECT count(*) FROM users as app role without set_config = 0", "sqlstate": null },
+    { "id": "poolReuse", "case": "tx-local tenant", "result": "withTenantTx A then B on same pool sees only that tenant emails" },
+    { "id": "A15", "case": "foreign UUID", "result": "GET /v1/directory/users/{userB} as Alpha admin", "http": 404, "body": "Recurso indisponível" }
+  ],
+  "ownerPathNeverUsedByApi": true,
+  "sanitizedErrors": true
+}

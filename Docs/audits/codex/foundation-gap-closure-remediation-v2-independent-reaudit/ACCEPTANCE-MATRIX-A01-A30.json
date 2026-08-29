@@ -1,0 +1,17 @@
+{
+  "auditDate": "2026-08-26",
+  "summary": { "MET": 29, "PARTIAL": 1, "FAIL": 0, "NOT_PROVEN": 0 },
+  "reconciliation": [
+    {
+      "area": "credentials-and-secret-scan",
+      "status": "MET",
+      "reason": "Repository scan and positive/negative scanner tests independently pass."
+    },
+    {
+      "area": "outbox-integrated-proof",
+      "status": "PARTIAL",
+      "reason": "Implementation and test coverage are present, but independent PostgreSQL execution was blocked by Docker engine permissions."
+    }
+  ],
+  "governanceObservation": "A prior Codex audit artifact was included in the implementer's delta; closed audit evidence must be append-only."
+}

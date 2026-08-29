@@ -9,7 +9,7 @@
     "plugins": [{ "name": "next" }],
     "paths": { "@/*": ["./*"] },
     "allowJs": true,
-    "incremental": true
+    "incremental": false
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

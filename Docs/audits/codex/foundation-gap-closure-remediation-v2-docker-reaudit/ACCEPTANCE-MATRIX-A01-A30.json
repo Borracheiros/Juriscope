@@ -1,0 +1,22 @@
+{
+  "auditDate": "2026-08-26",
+  "summary": { "MET": 30, "PARTIAL": 0, "FAIL": 0, "NOT_PROVEN": 0 },
+  "reconciliation": [
+    {
+      "area": "credentials-and-secret-scan",
+      "status": "MET",
+      "reason": "Repository scan and positive/negative scanner tests independently pass."
+    },
+    {
+      "area": "api-postgresql-proof",
+      "status": "MET",
+      "reason": "All 12 API tests passed under Testcontainers with zero skipped."
+    },
+    {
+      "area": "outbox-integrated-proof",
+      "status": "MET",
+      "reason": "All 5 worker tests passed under Testcontainers with zero skipped."
+    }
+  ],
+  "governanceObservation": "This re-audit creates a new append-only package and does not rewrite completed Codex audit evidence."
+}

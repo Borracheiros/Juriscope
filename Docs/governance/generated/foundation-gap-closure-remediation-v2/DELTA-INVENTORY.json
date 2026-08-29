@@ -1,0 +1,25 @@
+{
+  "finding": "F-01",
+  "strategy": "Rewrite documentation phrasing so examples do not match live scanner patterns. Do not exclude Docs/. Do not weaken PATTERNS. Do not broaden allowlist.",
+  "filesChanged": [
+    {
+      "path": "Docs/governance/generated/foundation-gap-closure-remediation/CREDENTIALS-AND-SECRET-SCAN.md",
+      "change": "Replaced live-matching SQL PASSWORD examples and credential-bearing DSNs with descriptive prose"
+    },
+    {
+      "path": "Docs/audits/codex/foundation-gap-closure-remediation-independent-audit/FINDINGS.md",
+      "change": "Rephrased criterion line that embedded a quoted PASSWORD example so repo scan stays clean"
+    }
+  ],
+  "notChanged": [
+    "scripts/secret-scan.cjs patterns",
+    "scripts/secret-scan.test.cjs positive fixtures (remain inside synthetic allowlist blocks)",
+    "apps/** product code",
+    "migrations"
+  ],
+  "scannerStillDetects": [
+    "SQL PASSWORD clause with a single-quoted literal value",
+    "PostgreSQL DSN that embeds both username and password before the host",
+    "credential-shaped secrets when present in .env.example content"
+  ]
+}

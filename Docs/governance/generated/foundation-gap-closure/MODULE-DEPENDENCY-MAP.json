@@ -1,0 +1,92 @@
+{
+  "generatedAt": "2026-08-26T21:30:00-03:00",
+  "modules": [
+    {
+      "module": "platform.health",
+      "ownedTables": [],
+      "publicContracts": ["GET /v1/health", "GET /v1/ready"],
+      "dependencies": ["pg pool (DATABASE_APP_URL only)"],
+      "emittedEvents": []
+    },
+    {
+      "module": "platform.identity",
+      "ownedTables": ["tenants", "users", "access_profiles", "profile_capabilities", "memberships"],
+      "publicContracts": [
+        "POST /v1/auth/login",
+        "POST /v1/auth/logout",
+        "GET /v1/me",
+        "GET /v1/directory/users",
+        "GET /v1/directory/users/:id"
+      ],
+      "dependencies": ["packages/contracts", "packages/security", "packages/config", "app_private.find_login", "platform.audit", "platform.authorization"],
+      "emittedEvents": []
+    },
+    {
+      "module": "platform.authorization",
+      "ownedTables": [],
+      "publicContracts": ["resolvePrincipal (internal)", "denyIfUnauthorized (internal)"],
+      "dependencies": ["packages/security.assertCapability", "memberships+profiles+capabilities in DB", "platform.audit"],
+      "emittedEvents": []
+    },
+    {
+      "module": "platform.audit",
+      "ownedTables": ["audit_events"],
+      "publicContracts": ["GET /v1/audit"],
+      "dependencies": ["packages/observability.getCorrelationId"],
+      "emittedEvents": []
+    },
+    {
+      "module": "platform.idempotency",
+      "ownedTables": ["idempotency_keys"],
+      "publicContracts": ["Idempotency-Key header on POST /v1/ops/heartbeat"],
+      "dependencies": [],
+      "emittedEvents": []
+    },
+    {
+      "module": "platform.ops",
+      "ownedTables": [],
+      "publicContracts": ["POST /v1/ops/heartbeat"],
+      "dependencies": ["platform.idempotency", "platform.audit", "platform.outbox"],
+      "emittedEvents": ["SessionHeartbeat (outbox)"]
+    },
+    {
+      "module": "platform.outbox",
+      "ownedTables": ["outbox_events"],
+      "publicContracts": ["insertOutbox (internal)", "app_private.claim_outbox|complete_outbox|fail_outbox"],
+      "dependencies": ["packages/observability.getCorrelationId"],
+      "emittedEvents": ["outbox_events rows (PENDING→PROCESSING→PUBLISHED|FAILED_PERMANENT)"]
+    },
+    {
+      "module": "worker.outbox",
+      "ownedTables": [],
+      "publicContracts": ["WORKER_DATABASE_URL processOnce"],
+      "dependencies": ["packages/config.loadWorkerEnv", "app_private outbox functions"],
+      "emittedEvents": []
+    },
+    {
+      "module": "packages.domain",
+      "ownedTables": [],
+      "publicContracts": ["state machines", "invariants", "DomainError.code"],
+      "dependencies": ["packages/contracts (states only)"],
+      "emittedEvents": []
+    },
+    {
+      "module": "legal skeletons (futureScope)",
+      "ownedTables": [],
+      "publicContracts": ["ModuleSkeletonsModule.names() — not HTTP operational"],
+      "dependencies": [],
+      "emittedEvents": [],
+      "names": [
+        "client-party-registry",
+        "legal-intake",
+        "conflict-check",
+        "matter-case-management",
+        "deadlines-docketing",
+        "documents",
+        "legal-research",
+        "ai-work-product"
+      ]
+    }
+  ],
+  "circularImports": "none detected in platform extraction (controller → use-case/services → repositories; domain has no Nest/pg imports)"
+}

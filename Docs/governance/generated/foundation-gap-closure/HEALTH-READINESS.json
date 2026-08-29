@@ -1,0 +1,27 @@
+{
+  "health": {
+    "path": "/v1/health",
+    "meaning": "process alive only",
+    "http": 200,
+    "body": { "status": "ok", "service": "api" },
+    "noDatabase": true
+  },
+  "readyUp": {
+    "path": "/v1/ready",
+    "http": 200,
+    "body.database": "up",
+    "noDsn": true
+  },
+  "readyDown": {
+    "path": "/v1/ready",
+    "setup": "app closed; DATABASE_APP_URL pointed at 127.0.0.1:1; new Nest app",
+    "http": 503,
+    "code": "NOT_READY",
+    "noDsn": true
+  },
+  "shutdown": {
+    "api": "PoolCloser.onModuleDestroy → pool.end()",
+    "worker": "SIGTERM/SIGINT stop loop; finally pool.end()",
+    "tests": "afterAll app.close, owner.end, db.stop (Testcontainers)"
+  }
+}

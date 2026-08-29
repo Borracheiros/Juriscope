@@ -9,8 +9,8 @@ alwaysApply: false
 - Every schema change requires a migration. Do not edit live schema by hand.
 - Never alter production-critical tables without backward-compatibility analysis (reads and writes during deploy).
 - Prefer additive migrations first (new columns/tables/indexes). Destructive changes (drop, rename, tighten constraints) come later and must be explicitly planned.
-- Document indexes, foreign keys, unique constraints, and tenant boundaries in the migration or schema notes.
-- Sensitive tables need an audit strategy and retention notes.
+- Document indexes, foreign keys, unique constraints, and tenant boundaries in the migration or schema notes. Tenant-scoped tables: RLS + FORCE RLS.
+- Sensitive tables need an audit strategy and retention notes (LGPD / privilégio jurídico — sem PII desnecessária em logs).
 - Do not rewrite existing data implicitly. Any data backfill needs a rollback consideration.
 - Seeds and fixtures must be deterministic (stable IDs, no `now()`-only uniqueness, no unordered random data).
 

@@ -1,0 +1,15 @@
+{
+  "phase": "FOUNDATION-GAP-CLOSURE-REMEDIATION-V2",
+  "finding": "F-01",
+  "generatedAt": "2026-08-26T22:28:00-03:00",
+  "cwd": "E:\\TCC\\Juridico-IA",
+  "branch": "master",
+  "head": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "origin": "ABSENT",
+  "parentAudit": "Docs/audits/codex/foundation-gap-closure-remediation-independent-audit",
+  "parentVerdict": "JURIDICO_IA_FOUNDATION_CODEX_AUDIT_FAILED_WITH_ACTIONABLE_EVIDENCE",
+  "commit": "NOT_EXECUTED",
+  "push": "NOT_EXECUTED",
+  "deploy": "NOT_EXECUTED",
+  "Sprint1": "NOT_STARTED"
+}

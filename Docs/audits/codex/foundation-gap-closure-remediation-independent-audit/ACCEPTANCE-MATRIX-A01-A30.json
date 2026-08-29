@@ -1,0 +1,28 @@
+{
+  "auditDate": "2026-08-26",
+  "basis": "Reconciliation of the prior A01-A30 matrix against the remediation delta",
+  "summary": {
+    "MET": 28,
+    "PARTIAL": 1,
+    "FAIL": 1,
+    "NOT_PROVEN": 0
+  },
+  "reconciledItems": [
+    {
+      "area": "outbox",
+      "status": "PARTIAL",
+      "reason": "Implementation and tests are present and static invariants were inspected, but the independent dynamic suite was blocked by unavailable container runtime."
+    },
+    {
+      "area": "credentials-and-secret-scan",
+      "status": "FAIL",
+      "reason": "Both repository secret-scan commands fail in the delivered working tree due to findings in the generated remediation documentation."
+    },
+    {
+      "area": "recursive-audit-sanitization",
+      "status": "MET",
+      "reason": "Two independent unit tests passed and recursive object/array traversal was statically confirmed."
+    }
+  ],
+  "note": "The unchanged 27 items retain their prior MET classification. Foundation approval requires zero FAIL and sufficient independent proof for the outbox integration path."
+}

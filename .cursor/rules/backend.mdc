@@ -9,11 +9,12 @@ alwaysApply: false
 Use this flow: **controller → use case → domain → repository**.
 
 - Controllers stay thin: parse input, call a use case, map the result to HTTP. No ORM, no business rules.
-- Use cases orchestrate domain logic. They must not talk to HTTP, queues, or raw SQL/ORM APIs.
+- Use cases orchestrate domain logic. They must not talk to HTTP, queues, or raw driver APIs.
 - Domain holds entities, value objects, and domain errors. Keep it free of infrastructure.
-- Repositories persist and retrieve only. No business decisions inside them.
+- Repositories persist and retrieve only (SQL parametrizado via `pg` / adapters). No business decisions inside them. **Sem TypeORM.**
 - Services must not mix orchestration with infrastructure (DB clients, HTTP clients, brokers).
-- Catch infrastructure errors at the adapter boundary and map them to application or domain errors. Do not leak ORM/driver exceptions from use cases or controllers.
+- Catch infrastructure errors at the adapter boundary and map them to application or domain errors. Do not leak driver exceptions from use cases or controllers.
+- Respect domain invariants in `Docs/domain/business-invariants.json` (esp. IA e confirmação humana).
 
 ## Security and tenancy
 
@@ -26,6 +27,6 @@ Use this flow: **controller → use case → domain → repository**.
 - Add integration tests when the change touches DB, API, queue, or an external service.
 
 ```text
-❌ Controller → ORM / business rules
-✅ Controller → UseCase → Domain ← Repository (infra adapter)
+❌ Controller → ORM / TypeORM / business rules
+✅ Controller → UseCase → Domain ← Repository (SQL parametrizado)
 ```

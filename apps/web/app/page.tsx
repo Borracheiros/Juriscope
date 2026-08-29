@@ -62,8 +62,8 @@ export default function HomePage() {
         <p style={{ margin: 0, letterSpacing: "0.12em", fontSize: 12, textTransform: "uppercase" }}>Juridico-IA</p>
         <nav aria-label="Áreas de trabalho" style={{ marginTop: 24, display: "grid", gap: 8 }}>
           {["Intake", "Conflito", "Matéria", "Documentos", "Prazos", "Pesquisa", "Revisão de IA"].map((item) => (
-            <span key={item} style={{ color: "#5c6570" }}>
-              {item}
+            <span key={item} style={{ color: "#5c6570" }} aria-disabled="true">
+              {item} — em breve
             </span>
           ))}
         </nav>

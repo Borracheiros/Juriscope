@@ -1,0 +1,29 @@
+{
+  "lint": {
+    "command": "npm run lint -w @juridico-ia/web",
+    "cwd": "E:\\TCC\\Juridico-IA",
+    "startedAt": "2026-08-26T21:26:07-03:00",
+    "exitCode": 0,
+    "durationMs": 3140,
+    "engine": "eslint + eslint-config-next (not no-op)"
+  },
+  "typecheck": { "includedIn": "npm run typecheck", "exitCode": 0 },
+  "unit": {
+    "command": "npm run test -w @juridico-ia/web",
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "cleanup": "afterEach(cleanup) in StatusView.test.tsx"
+  },
+  "boot": {
+    "command": "npm run build -w @juridico-ia/web",
+    "startedAt": "2026-08-26T21:27:49-03:00",
+    "exitCode": 0,
+    "durationMs": 53981,
+    "next": "15.5.24",
+    "note": "next start long-running server and browser E2E not executed (minimal navigation policy)"
+  },
+  "states": ["LOADING", "NOT_COLLECTED", "PARTIAL", "STALE", "FORBIDDEN", "ERROR", "READY", "READY_WITH_WARNINGS", "BLOCKED"],
+  "futureModulesUi": "nav items labeled 'em breve' aria-disabled",
+  "a11y": "login form aria-label Entrar; labels; password autocomplete; forbidden/error role=alert"
+}

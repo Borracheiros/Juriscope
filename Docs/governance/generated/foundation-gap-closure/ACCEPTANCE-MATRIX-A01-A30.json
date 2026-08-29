@@ -1,0 +1,186 @@
+{
+  "generatedAt": "2026-08-26T21:30:00-03:00",
+  "items": [
+    {
+      "id": "A01",
+      "criterion": "banco vazio → migrations completas",
+      "status": "MET",
+      "evidence": "apps/api/test/foundation.test.ts beforeAll: information_schema.tables public count=0 then runMigrations pendingAfter=0"
+    },
+    {
+      "id": "A02",
+      "criterion": "segunda migration run → zero pending",
+      "status": "MET",
+      "evidence": "second runMigrations applied=[]; pendingCount=0"
+    },
+    {
+      "id": "A03",
+      "criterion": "API boot",
+      "status": "MET",
+      "evidence": "createTestApp NestFactory.create AppModule; GET /v1/health 200"
+    },
+    {
+      "id": "A04",
+      "criterion": "web boot",
+      "status": "MET",
+      "evidence": "npm run build -w @juridico-ia/web EXIT=0 durationMs=53981 Next.js 15.5.24 compiled successfully. next start not kept running."
+    },
+    {
+      "id": "A05",
+      "criterion": "health saudável",
+      "status": "MET",
+      "evidence": "GET /v1/health 200 {status:ok,service:api}"
+    },
+    {
+      "id": "A06",
+      "criterion": "readiness com banco saudável",
+      "status": "MET",
+      "evidence": "GET /v1/ready 200 body.database=up"
+    },
+    {
+      "id": "A07",
+      "criterion": "readiness com banco indisponível → 503",
+      "status": "MET",
+      "evidence": "ready returns 503 when database is down; body.code=NOT_READY; no postgresql:// in body"
+    },
+    {
+      "id": "A08",
+      "criterion": "tenant A lê A",
+      "status": "MET",
+      "evidence": "GET /v1/audit cookie Alpha 200; directory admin Alpha emails without beta"
+    },
+    {
+      "id": "A09",
+      "criterion": "tenant A não lê B",
+      "status": "MET",
+      "evidence": "audit id overlap false; directory without beta"
+    },
+    {
+      "id": "A10",
+      "criterion": "tenant A não escreve B",
+      "status": "MET",
+      "evidence": "UPDATE/DELETE userB rowCount=0; INSERT tenant B from A context SQLSTATE 42501|23514|23503"
+    },
+    {
+      "id": "A11",
+      "criterion": "tenant por body/query/header bloqueado",
+      "status": "MET",
+      "evidence": "x-tenant-id, query.tenantId, body.tenantId → 403"
+    },
+    {
+      "id": "A12",
+      "criterion": "sem tenant falha fechado",
+      "status": "MET",
+      "evidence": "app role SELECT users without tenant guc count=0 (FORCE RLS)"
+    },
+    {
+      "id": "A13",
+      "criterion": "capability permitida",
+      "status": "MET",
+      "evidence": "tenant_admin GET /v1/directory/users 200"
+    },
+    {
+      "id": "A14",
+      "criterion": "capability ausente → 403",
+      "status": "MET",
+      "evidence": "lawyer GET /v1/directory/users 403 ACCESS_DENIED"
+    },
+    {
+      "id": "A15",
+      "criterion": "UUID estrangeiro não enumera",
+      "status": "MET",
+      "evidence": "GET /v1/directory/users/{userB} 404 Recurso indisponível"
+    },
+    {
+      "id": "A16",
+      "criterion": "replay idempotente",
+      "status": "MET",
+      "evidence": "two POST heartbeat Idempotency-Key hb-1 same payload same auditId"
+    },
+    {
+      "id": "A17",
+      "criterion": "payload incompatível → conflito",
+      "status": "MET",
+      "evidence": "same key {n:2} HTTP 409"
+    },
+    {
+      "id": "A18",
+      "criterion": "concorrência 10× → um efeito",
+      "status": "MET",
+      "evidence": "10 parallel heartbeat hb-10 all 200; unique auditIds=1; outbox count=1"
+    },
+    {
+      "id": "A19",
+      "criterion": "outbox atômico com domínio",
+      "status": "MET",
+      "evidence": "heartbeat same TX; ROLLBACK insert event_type=X leaves count=0"
+    },
+    {
+      "id": "A20",
+      "criterion": "dois workers → processamento único",
+      "status": "MET",
+      "evidence": "worker test processOnce w1+w2 === 1 PUBLISHED=1 EXIT=0"
+    },
+    {
+      "id": "A21",
+      "criterion": "auditoria de sucesso sem conteúdo sensível",
+      "status": "MET",
+      "evidence": "audit JSON does not match SyntheticPass|password_hash"
+    },
+    {
+      "id": "A22",
+      "criterion": "auditoria de negação",
+      "status": "MET",
+      "evidence": "authorization.denied present after lawyer directory 403"
+    },
+    {
+      "id": "A23",
+      "criterion": "usuário comum não altera auditoria",
+      "status": "MET",
+      "evidence": "juridico_app UPDATE/DELETE audit_events SQLSTATE 42501 (separate TXs)"
+    },
+    {
+      "id": "A24",
+      "criterion": "config obrigatória ausente → fail-closed",
+      "status": "MET",
+      "evidence": "packages/config 6 tests: missing DATABASE_APP_URL, owner as runtime, insecure production, no DSN in error"
+    },
+    {
+      "id": "A25",
+      "criterion": "secret scan limpo",
+      "status": "MET",
+      "evidence": "npm run secret-scan EXIT=0 secret-scan: ok"
+    },
+    {
+      "id": "A26",
+      "criterion": "lint real API",
+      "status": "MET",
+      "evidence": "npm run lint -w @juridico-ia/api eslint src test --max-warnings 0 EXIT=0 durationMs=18787"
+    },
+    {
+      "id": "A27",
+      "criterion": "lint real web",
+      "status": "MET",
+      "evidence": "npm run lint -w @juridico-ia/web eslint . --max-warnings 0 EXIT=0 durationMs=3140 (after fixing 2 warnings)"
+    },
+    {
+      "id": "A28",
+      "criterion": "typecheck",
+      "status": "MET",
+      "evidence": "npm run typecheck EXIT=0 durationMs=12489; API include src+test; incremental false"
+    },
+    {
+      "id": "A29",
+      "criterion": "testes dirigidos",
+      "status": "MET",
+      "evidence": "DIRECTED-TEST-RESULTS.json; aggregate npm test EXIT=0 28 passed"
+    },
+    {
+      "id": "A30",
+      "criterion": "cleanup completo do scratch",
+      "status": "MET",
+      "evidence": "afterAll db.stop(); docker ps -a filter pgvector/pgvector:pg16 → no containers remaining"
+    }
+  ],
+  "summary": { "MET": 30, "PARTIAL": 0, "FAIL": 0, "NOT_PROVEN": 0 }
+}

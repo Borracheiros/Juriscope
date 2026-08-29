@@ -1,0 +1,17 @@
+{
+  "verdictBasis": "Independent static audit plus directed commands",
+  "items": [
+    {"range":"A01-A02","status":"NOT_PROVEN","reason":"container runtime unavailable"},
+    {"range":"A03-A07","status":"PARTIAL","reason":"static implementation improved; DB-backed execution unavailable"},
+    {"range":"A08-A15","status":"NOT_PROVEN","reason":"10 API tests skipped before execution"},
+    {"range":"A16-A18","status":"NOT_PROVEN","reason":"idempotency DB tests skipped"},
+    {"id":"A19","status":"PARTIAL","reason":"same transaction visible statically; rollback test skipped"},
+    {"id":"A20","status":"FAIL","reason":"worker marks PUBLISHED without executing a handler/effect"},
+    {"range":"A21-A23","status":"NOT_PROVEN","reason":"audit DB tests skipped; nested sanitization gap remains"},
+    {"id":"A24","status":"MET","reason":"independent config suite 6/6"},
+    {"id":"A25","status":"FAIL","reason":"scanner misses hardcoded SQL role passwords and skips .env.example"},
+    {"range":"A26-A29","status":"EVIDENCE_ACCEPTED_WITH_LIMITS","reason":"Cursor logs record green gates; independent rerun focused on high-risk contracts"},
+    {"id":"A30","status":"NOT_PROVEN","reason":"no scratch container started in independent audit"}
+  ],
+  "allClosed": false
+}

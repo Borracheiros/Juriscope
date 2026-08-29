@@ -1,0 +1,46 @@
+{
+  "auditDate": "2026-08-26",
+  "auditor": "Codex independent audit",
+  "head": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "tests": [
+    {
+      "command": "npm run test -w @juridico-ia/worker",
+      "exitCode": 1,
+      "result": "BLOCKED_BY_ENVIRONMENT",
+      "counts": { "passed": 0, "skipped": 5 },
+      "evidence": "Could not find a working container runtime strategy"
+    },
+    {
+      "command": "npm run test -w @juridico-ia/api",
+      "exitCode": 1,
+      "result": "PARTIAL_ENVIRONMENT_BLOCK",
+      "counts": { "passed": 2, "skipped": 10 },
+      "evidence": "Recursive audit sanitizer tests passed; PostgreSQL integration suite could not start Testcontainers"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "npm run secret-scan",
+      "exitCode": 1,
+      "result": "FAIL",
+      "evidence": [
+        "sql-password in Docs/governance/generated/foundation-gap-closure-remediation/CREDENTIALS-AND-SECRET-SCAN.md",
+        "pg-url-credentials in Docs/governance/generated/foundation-gap-closure-remediation/CREDENTIALS-AND-SECRET-SCAN.md"
+      ]
+    },
+    {
+      "command": "npm run secret-scan:test",
+      "exitCode": 1,
+      "result": "FAIL",
+      "evidence": "AssertionError: unexpected hits; actual 2, expected 0"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "result": "PASS_WITH_LINE_ENDING_WARNINGS"
+    }
+  ]
+}

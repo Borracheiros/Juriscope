@@ -1,154 +1,114 @@
 ---
-description: Premissas obrigatórias de desenvolvimento Juridico-IA — SoT backend, discovery, tenant/RLS/RBAC, LGPD, audit, testes, entrega governada.
+description: Premissas obrigatórias de desenvolvimento Juridico-IA — SoT backend, tenant/RLS/RBAC, LGPD, auditoria, testes, entrega governada.
 alwaysApply: true
 ---
 
 # Juridico-IA — premissas de desenvolvimento (constituição operacional)
 
-Regra complementar a `juridico-ia-master-governance.mdc`, `juridico-ia-dev-and-data.mdc`, `portugues-brasileiro.mdc`, `juridico-ia-e2e-test-credentials.mdc` e `juridico-ia-agent-orchestrator.mdc`. Em caso de conflito, **segurança e tenant isolation prevalecem**.
+Regra complementar a `juridico-ia-tcc-scope.mdc`, `juridico-ia-master-governance.mdc`, `juridico-ia-dev-and-data.mdc`, `portugues-brasileiro.mdc` e `orquestrador-agentes.mdc`. Em caso de conflito, **segurança e isolamento de tenant prevalecem**.
 
 ## 1. Backend é a fonte da verdade
 
-Toda **regra de negócio** fica no backend (NestJS).
-
-O frontend e o BFF podem organizar, exibir, sanitizar e facilitar navegação — **não** duplicar regra crítica.
-
-Exemplos que **devem vir do backend**: status canônico, permissões, bloqueios de check-in, readiness, autorização, handoff, fechamento operacional, teto de desconto, elegibilidade.
+Toda **regra de negócio** fica no backend (NestJS). Frontend e BFF organizam, exibem e sanitizam — **não** duplicam autorização, tenancy ou idempotência.
 
 ## 2. Reaproveitar antes de criar (discovery obrigatório)
 
-Antes de qualquer implementação nova, o agente deve fazer **discovery**:
-
-- O que já existe?
-- Qual módulo resolve parte disso?
-- Existe service, entity, DTO, BFF, componente ou teste reaproveitável?
-- Existe padrão em `Docs/governance/patterns/`?
-
-**Proibido:** duplicar módulo, criar tabela desnecessária, criar regra paralela, reabrir módulo maduro sem motivo.
+Antes de implementação nova: o que já existe, qual módulo resolve, qual contrato público reutilizar. **Proibido** duplicar módulo ou reabrir skeleton jurídico como se fosse operacional.
 
 ## 3. Multi-tenant desde o início
 
 - `tenant_id` obrigatório quando aplicável
-- RLS habilitado; **FORCE RLS** em tabelas sensíveis
-- cross-tenant bloqueado
-- nenhum dado de outro tenant pode aparecer por erro de UI/API
+- RLS + **FORCE RLS** em tabelas tenant-scoped
+- Role runtime sem SUPERUSER/BYPASSRLS
+- cross-tenant bloqueado; UUID estrangeiro não enumerável
+- Office/team **não persistidos** nesta fundação — não afirmar autorização por equipe
 
-## 4. RBAC e perfil ativo
+## 4. RBAC e capabilities no backend
 
-Permissão pelo **perfil ativo** do usuário.
+Permissão pela **capability resolvida no banco** (membership + perfil + grants), não só pelo `profileCode` do JWT.
 
-- Recepção não inicia atendimento clínico
-- Médico não vê financeiro sensível sem grant
-- Auditor vê dado sanitizado
-- Admin **não** é atalho para burlar regra
+- Advogado não vê dados de outro escritório
+- Admin do tenant **não** é superadmin implícito da plataforma
+- Auditor vê trilha sanitizada
+- **403** = acesso restrito explícito — nunca mascarar como lista vazia
 
-**403** = acesso restrito explícito — **nunca** mascarar como lista vazia ou sucesso silencioso.
-
-## 5. LGPD by design
+## 5. LGPD e privilégio jurídico
 
 Nunca expor dado sensível sem necessidade.
 
-**Proibido expor** em API, log, relatório ou evidence: CPF completo, carteirinha completa, documento completo, PHI, diagnóstico, evolução, prescrição, laudo sensível, token, secret, payload bruto, message body, raw payment, XML TISS completo.
+**Proibido expor** em API, log, relatório ou evidência: senha, token, cookie, prompt, documento integral, PII desnecessária, payload bruto, conteúdo jurídico privilegiado.
 
-**CPF (domínio BR):** obrigatório para cadastro definitivo; não é PK; mascarar; hash/cripto para deduplicação; proteger com RBAC/RLS.
+Mascarar identificadores quando a UI não precisar do valor completo.
 
 ## 6. Auditabilidade obrigatória
 
-Toda ação relevante gera audit **seguro**: quem, quando, tenant, entidade, transição — sem PHI desnecessário, sem payload bruto, sem segredo.
+Toda ação relevante gera audit **seguro**: tenant, ator, ação, tipo de recurso, identificador seguro, resultado, timestamp, correlationId, origem/canal — sem segredo, sem documento integral.
 
-Exemplos: `authorization.lifecycle.requested`, `frontdesk.payment.discount_applied`, `frontdesk.cash.closed`, `clinical.queue.patient_called`.
+Exemplos: `identity.login`, `ops.heartbeat`, `authorization.denied`, `identity.logout`.
 
-## 7. Falhar fechado (fail closed)
+A role runtime **não** faz UPDATE/DELETE em `audit_events`.
+
+## 7. Falhar fechado
 
 - falha de permissão → bloquear
-- falha de collector crítico → bloquear
-- falha de readiness crítica → não liberar check-in
-- falha de tenant → 403
-- falha de comunicação → não enviar
-
-**Nunca** transformar erro sensível em sucesso silencioso.
+- usuário ou tenant suspenso → perder acesso
+- config runtime ausente ou owner usado como API → não iniciar
+- produção sem `COOKIE_SECURE=true` ou `WEB_ORIGIN` HTTPS → não iniciar
+- banco indisponível em `/ready` → HTTP 503
+- tenant em body/query/header → ignorar ou rejeitar
 
 ## 8. Nada de produção sem autorização explícita
 
-Para dev, demo e testes: produção = false, payment real = false, communication live = false, TISS live = false, provider live = false, operadora live = false, **dados reais = proibido**. Demo controlada ≠ go-live.
+Dev/demo/testes: produção = false, provedores jurídicos/financeiros/IA/comunicação = não chamar, **dados reais = proibido**.
 
-## 9. Dados sintéticos e TDF governado
+## 9. Dados sintéticos
 
-- usar Test Data Factory / tenants de teste
-- não criar massa ad hoc insegura
-- não usar paciente real, CPF real, credenciais em commits
-- E2E Attent: carregar `frontend/.env.e2e.local` (ver `juridico-ia-e2e-test-credentials.mdc`)
+- tenants e usuários de teste (Alpha/Beta)
+- não usar cliente real, processo real, documento real ou credenciais reais em commits
 
-## 10. Frontend enterprise
+## 10. Frontend e superfícies cognitivas
 
-UI operacional: desktop-first quando complexo; responsiva; **loading, error, empty, partial, forbidden**; sem jargão técnico para usuário final; próxima ação clara; CTAs seguros; a11y; i18n.
+Estados distintos: loading, empty/not collected, partial, stale, forbidden, error, ready, invalid_contract.
 
-Cada tela responde: onde estou? qual status? o que falta? próxima ação? o que posso/não posso fazer?
+Superfícies EAP (quando no escopo autorizado):
+
+- **1.5.4** Legal Mission Control — motivo, origem, próxima ação
+- **1.5.5** Client & Matter Cockpit — contexto consolidado autorizado
+- **1.5.6** Legal Decision Workspace — decisão com confirmação humana
+- **1.5.7** IA contextual — fonte exibida ou insuficiência declarada; confirmação humana para ações críticas
+
+Módulos futuros (intake, conflito, matéria, documentos, prazos, pesquisa, revisão de IA) permanecem **skeleton / em breve**, não operacionais, até autorização explícita.
+
+Acessibilidade básica no login e no shell. Paths em `apps/web/**`.
 
 ## 11. BFF não duplica regra
 
-O BFF pode: orquestrar, sanitizar, preservar `requestId`, preservar 403, adaptar resposta para UI.
+O BFF orquestra e preserva 401/403. Não decide permissão sozinho nem esconde erro como empty.
 
-O BFF **não** pode: criar regra paralela, decidir permissão sozinho, esconder erro como empty, expor payload bruto.
+## 12. Testes são parte da entrega
 
-## 12. i18n obrigatório
+Evidência real: comando, exit code, contagem. **SKIP ≠ PASS.** Mocks não provam RLS. Postgres scratch real para isolamento, idempotência e outbox.
 
-Textos de UI em **pt-BR** (principal), **en-US**, **fr-FR**. Rodar checks do escopo (`npm run i18n:check`, `npm run i18n:scan-hardcoded` quando aplicável). Ver `portugues-brasileiro.mdc`.
+## 13. Migrations
 
-## 13. Acessibilidade obrigatória
+Idempotentes; checksum SHA-256; sem DROP destrutivo sem aprovação; RLS/grants junto da tabela; rollback documentado, não executado às cegas. SQL parametrizado — **sem TypeORM**.
 
-Labels, foco visível, dialogs com foco inicial, aria-label, status textual (não só cor), `role="alert"` em erros, listas semânticas, mobile acessível.
+## 14. FutureScope ≠ entregue
 
-## 14. Testes são parte da entrega
+Fora do escopo TCC obrigatório: broker externo, DLQ completa, office/team, módulos jurídicos operacionais sem autorização, IA autônoma, produção/go-live, Sprints 9–11 (financeiro, portal, integrações).
 
-Fase só aprovada com **evidência real**. Conforme escopo: backend build/typecheck, specs, RLS/RBAC/audit specs, frontend lint/typecheck/build, i18n check, E2E, governance gate.
+## 15. Encerramento
 
-**SKIP ≠ PASS.** LRP dry-run com coverage 0 é apenas informativo.
-
-## 15. Documentação governada
-
-Entregar: Delivery Report, generated JSON, evidence JSON quando aplicável, riscos residuais, futureScope, próximo passo.
-
-Vereditos honestos: `APPROVED`, `APPROVED_WITH_RESIDUALS`, `REVIEWED_WITH_GAPS` — nunca aprovar com gap crítico aberto.
-
-## 16. Migrations aditivas e seguras
-
-Idempotente quando possível; sem DROP destrutivo sem aprovação; não quebrar status legado; RLS/permissions junto da tabela; rollback pensado. Executar via `cd backend && npm run migration:run` (ver `juridico-ia-dev-and-data.mdc`).
-
-## 17. Módulos maduros protegidos
-
-Não reabrir sem pedido explícito ou bug/gap comprovado: Recepção madura, Clinical/PEP, ECS, EPPS, EDCS, Authorization enrichment, Handoff, Post-care closure, Clinical queue, Queue ticket, Access-to-Care orchestrator, IAM/RBAC/RLS.
-
-Integração mínima apenas quando necessário.
-
-## 18. FutureScope ≠ entregue
-
-Fora do escopo atual (roadmap ok, não marcar como feito): TISS live, gateway pagamento, operadora live, comunicação live, PEP enterprise completo, RCM completo, produção/go-live, IA autônoma.
-
-## 19. Encerramento de toda entrega
-
-- commit sugerido (só commitar quando o usuário pedir)
+- commit só quando o usuário pedir
 - testes executados listados
-- evidence gerado quando aplicável
 - riscos residuais
-- próximo passo recomendado
+- rastreabilidade EAP quando aplicável
+- próximo passo: auditoria independente ou evidência acadêmica — **não** Sprint 1 automática
 
-## 20. Bloco [Orquestrador] (início de cada tarefa)
+## 16. Bloco [Orquestrador]
 
-Antes de plano longo ou código, incluir:
-
-```text
-[Orquestrador] Intenção: …
-Discovery: … (o que já existe / o que reaproveitar)
-Escopo incluído: …
-Escopo excluído: …
-Skills: … | Ordem: … | Estratégia: …
-Critérios de aceite: …
-Vereditos possíveis: APPROVED | APPROVED_WITH_RESIDUALS | REVIEWED_WITH_GAPS
-```
-
-Para prompts de fase nomeada, seguir também `.cursor/skills/delivery-workflow/SKILL.md`.
+Seguir `.cursor/skills/juridico-ia-orchestrator/SKILL.md` e `.cursor/skills/delivery-workflow/SKILL.md`.
 
 ---
 
-**Resumo:** Juridico-IA é plataforma enterprise de saúde — segura, multi-tenant, auditável, LGPD by design, backend como SoT, UI operacional governada.
+**Resumo:** Juridico-IA é protótipo acadêmico de plataforma jurídica SaaS multi-tenant — segura, auditável, LGPD by design, backend como SoT, decisão humana sobre IA, isolamento de escritório (tenant).

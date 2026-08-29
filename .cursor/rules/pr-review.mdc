@@ -16,5 +16,7 @@ Reject or flag a PR when any of the following is true:
 - `TODO` or `FIXME` added without an issue reference
 - Secrets, tokens, keys, or credentials appear in code or config
 - Boundaries between layers were broken without strong justification
+- Tenant isolation, LGPD, or privilégio jurídico weakened without explicit approval
+- Scope expanded beyond TCC / authorized phase without user request
 
 Do not approve with a critical gap open. Use honest verdicts: the change is blocked until the missing test, migration, audit, or justification is present.

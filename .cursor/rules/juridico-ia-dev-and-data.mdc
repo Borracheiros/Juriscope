@@ -1,38 +1,36 @@
 ---
-description: Ambiente dev interno Juridico-IA (Railway) e o que significa reiniciar
+description: Ambiente de desenvolvimento Juridico-IA — Postgres scratch isolado, Compose local, demo TCC 1.5.9
 alwaysApply: true
 ---
 
-# Juridico-IA — ambiente interno de desenvolvimento e base de dados
+# Juridico-IA — ambiente de desenvolvimento e base de dados
 
-## Base de dados
+## Base de dados (Foundation)
 
-- A **mesma** instância PostgreSQL no **Railway** é usada para o desenvolvimento interno e para **produção** (`DATABASE_URL` no backend aponta para essa BD).
-- **Cuidado:** migrações, seeds e testes destrutivos afetam o ambiente partilhado. Preferir tenants de teste e operações conscientes.
-- **Governança / reconciliação:** `POST .../workflow-cases/auto-from-reconciliation` com `dryRun: false` e `GOVERNANCE_AUTO_CASE_APPLY_ENABLED=true` cria casos de workflow no tenant corrente — **nunca** correr apply contra produção real; usar tenant de teste na mesma BD.
+- Testes usam **PostgreSQL 16 + pgvector descartável** (Testcontainers / scratch). Não usar banco compartilhado, Railway ou produção.
+- Desenvolvimento local opcional: `docker compose up -d postgres` com volume **local**. Não é a prova de aceite da Foundation.
+- Roles: owner/migrator (`DATABASE_URL`) **separada** da API (`DATABASE_APP_URL`) e do worker (`WORKER_DATABASE_URL`).
+- **Proibido** na API: fallback para credencial owner.
 
-## “Reiniciar o ambiente interno de desenvolvimento”
+## Reinício do ambiente de desenvolvimento
 
-- Significa **apenas** voltar a arrancar **frontend** (Next.js, `npm run dev`) e **backend** (NestJS, `npm run start:dev`).
-- **Não** inclui: Docker Compose, Postgres local, reinício da BD, nem alteração de serviços Railway.
-- Script na raiz: `bash scripts/dev-restart.sh` — liberta portas típicas **3000** (Next) e **3001** (API), elimina **órfãos** `nest --watch` / `next dev` deste repositório, arranca Nest + Next em background (logs em `$TMPDIR/juridico-ia-dev/`) e, por defeito, um **watcher de inatividade** (`dev-idle-watch.sh`) que chama `dev-stop.sh` após **60 min** sem tráfego (variáveis `JURIDICO_IA_DEV_IDLE_MINUTES`, `JURIDICO_IA_DEV_IDLE_WATCH=0` para desligar).
-- Parar manualmente: `bash scripts/dev-stop.sh` ou `npm run dev:stop`.
-- **Pré-aprovação (Hooks):** o projeto define `.cursor/hooks.json` → `beforeShellExecution` com matcher só para comandos de restart dev; o script devolve `permission: allow` (menos fricção na UI). Se não surtir efeito, **Developer: Reload Window** ou reiniciar o Cursor.
-- **Agente Cursor:** se ainda falhar (“Review cancelled or failed”), costuma ser sandbox sobre `kill` + `nohup`. Opções: permissão total na UI; ou `npm run dev:restart:safe` / `bash scripts/dev-restart.sh --skip-port-free` (sem kill nas portas).
+- Significa arrancar **web** (Next.js em `apps/web`, porta 3000) e **API** (NestJS em `apps/api`, porta 3001), e opcionalmente o worker (`apps/worker`).
+- Postgres scratch de testes **não** faz parte do restart de UI.
+- Não assumir serviços Railway, TypeORM legado ou pastas `frontend/` / `backend/`.
 
-## Migrações de base de dados (TypeORM)
+## Ambiente de demonstração (EAP 1.5.9)
 
-- **Não usar Docker Compose** como caminho predefinido para correr migrações neste projeto.
-- Executar **diretamente na consola**, com `DATABASE_URL` definido em `backend/.env` (Railway, Postgres local, ou outro — o que estiver configurado):
-  - `cd backend && npm run migration:show` — listar estado
-  - `cd backend && npm run migration:run` — aplicar pendentes
-  - `cd backend && npm run migration:revert` — só quando o utilizador pedir explicitamente
-- Alternativa documentada no `package.json`: `npm run migration:run:railway` quando se usar a CLI do Railway no portátil.
+- Demo local com dados **sintéticos** (tenants Alpha/Beta, usuários fictícios).
+- Instruções de execução devem ser reproduzíveis; sem dados reais nem provedores externos obrigatórios.
+- Não confundir demo com produção ou staging compartilhado.
+
+## Migrações
+
+- Executar via workspace da API: `npm run migration:run` (credencial owner).
+- Checksum SHA-256 persistido; mismatch falha fechado.
+- Rollback destrutivo **não** é executado nesta fundação; documentar risco apenas.
 
 ## Agente / assistente
 
-- Quando o utilizador pedir para **reiniciar o ambiente dev**, executar ou indicar **só** esse fluxo (Nest + Next), sem assumir Postgres local nem Docker Compose como parte do reinício.
-
-## Copy i18n (site público e billing)
-
-- Chaves `public.*` e textos visíveis ao utilizador: **português do Brasil (pt-BR)** em `pt-public.json` (merge → `pt.json`), **en-US** (`en.json`), **fr-FR** (`fr.json`). Ver regra do projeto `.cursor/rules/portugues-brasileiro.mdc`.
+- Não apontar testes para Railway, `DATABASE_PUBLIC_URL` ou produção.
+- Dados: somente sintéticos (clientes, partes, matérias, usuários de escritório).

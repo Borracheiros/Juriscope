@@ -1,0 +1,23 @@
+{
+  "jwtContains": ["sub", "tenantId"],
+  "jwtDoesNotContain": ["profileCode", "capabilities"],
+  "revalidation": "resolvePrincipal joins users, tenants, memberships, access_profiles, profile_capabilities on every authenticated request",
+  "suspendedUser": { "http": 401, "code": "UNAUTHENTICATED", "test": "revokes access when user is suspended" },
+  "capabilityAllowed": {
+    "profile": "tenant_admin",
+    "capability": "admin:manage",
+    "endpoint": "GET /v1/directory/users",
+    "http": 200
+  },
+  "capabilityDenied": {
+    "profile": "lawyer",
+    "capability": "admin:manage",
+    "endpoint": "GET /v1/directory/users",
+    "http": 403,
+    "code": "ACCESS_DENIED",
+    "auditAction": "authorization.denied"
+  },
+  "noImplicitSuperadmin": true,
+  "officeTeamOutOfScope": true,
+  "enumeration": { "foreignUuid": 404, "missingSameMessage": "Recurso indisponível" }
+}

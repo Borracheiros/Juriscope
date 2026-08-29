@@ -1,0 +1,63 @@
+---
+description: Escopo acadêmico do TCC Inteligent-Juridico — hierarquia normativa, mapa EAP, exclusões e FutureScope
+alwaysApply: true
+---
+
+# Juridico-IA — escopo TCC (constituição acadêmica)
+
+Complementa `juridico-ia-master-governance.mdc` e `juridico-ia-premissas-desenvolvimento.mdc`. Em conflito: **segurança e isolamento de tenant prevalecem**; em seguida, **escopo TCC**.
+
+## Identidade
+
+- **Projeto acadêmico:** TCC Inteligent-Juridico / Orion Jurídico (CEUB/UniCEUB — Ciência da Computação).
+- **Repositório:** Juridico-IA = implementação do **protótipo acadêmico**, não do produto comercial integral.
+- **Natureza:** plataforma jurídica SaaS multi-tenant, cognitiva (missões → contexto → decisões → ações → auditoria), com IA assistiva e confirmação humana.
+
+## Hierarquia normativa
+
+1. `Docs/Proposta-TCC-Orion-Juridico.md` (extraída do `.docx`)
+2. `Docs/EAP-Gestao-Projeto-Inteligent-Juridico.md`
+3. `Docs/architecture/` (TARGET-ARCHITECTURE, ADRs, ROADMAP)
+4. `Docs/domain/` (domain-model, business-invariants)
+5. `AGENTS.md`
+6. `.cursor/rules/` e `.cursor/skills/` (canônico); `.agents/skills/` = espelho
+
+## Mapa EAP ↔ incrementos
+
+| EAP | Incremento |
+|-----|------------|
+| 1.5.1 | Foundation / Sprint 0 / GAP-CLOSURE |
+| 1.5.2 | Identidade, RLS, RBAC |
+| 1.5.3 | Domínio jurídico mínimo (skeleton até autorização explícita) |
+| 1.5.4 | Legal Mission Control |
+| 1.5.5 | Client & Matter Cockpit |
+| 1.5.6 | Legal Decision Workspace |
+| 1.5.7 | IA contextual com fontes + confirmação humana |
+| 1.5.8 | Auditoria e rastreabilidade |
+| 1.5.9 | Ambiente de demonstração |
+| 1.6.x | Evidências (testes, usabilidade, IA, limitações) |
+| 1.7–1.8 | Artefatos acadêmicos — **não** implementação automática de produto |
+
+## Exclusões (EAP §8 / Proposta §3)
+
+Sem aprovação explícita do usuário: produto jurídico completo para produção; integração real com tribunais; dados jurídicos sigilosos reais; financeiro/CRM completo; assinatura real; app móvel; marketplace; agentes autônomos; arquitetura distribuída de produção; certificações/SLA comercial; treinamento de modelo fundacional próprio.
+
+## Protótipo TCC ≠ produto comercial
+
+- Roadmap técnico (Sprints 0–11) = backlog de engenharia do monólito.
+- Escopo **obrigatório do TCC** = EAP 1.5.x + evidências 1.6.x + documentação acadêmica.
+- **Sprints 9–11** (Financeiro, Portal, Integrações) = **FutureScope pós-TCC**.
+
+## Rastreabilidade
+
+Relatórios, vereditos e artifacts de fase devem citar o **código EAP** quando aplicável (ex.: `1.5.4`, `1.6.4`).
+
+## IA assistiva
+
+- Resposta com **fonte** ou declaração de **insuficiência**.
+- Decisão crítica e publicação de artefato de IA exigem **confirmação humana**.
+- Proibido tratar IA como substituta da análise jurídica profissional.
+
+## Ampliação de escopo
+
+Proibido iniciar Sprint 1+, módulos skeleton operacionais, ou FutureScope sem **autorização explícita** do usuário no pedido.

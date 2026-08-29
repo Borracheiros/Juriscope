@@ -1,5 +1,5 @@
 ---
-description: Constituição arquitetural — Enterprise Operational Governance Platform (filtro obrigatório antes de Phase 41+)
+description: Constituição arquitetural do protótipo TCC Juridico-IA — Foundation, jornada cognitiva e evidências
 alwaysApply: true
 ---
 
@@ -7,38 +7,45 @@ alwaysApply: true
 
 ## Missão
 
-Evoluir **incrementalmente** para um **Enterprise Operational Governance OS** — não ERP, não BI, não BPM isolado, não graph DB, não microservices.
+Evoluir **incrementalmente** o repositório Juridico-IA como **protótipo acadêmico** do TCC Inteligent-Juridico: plataforma jurídica SaaS multi-tenant, cognitiva e auditável — não ERP, não BI, não BPM isolado, não microservices, não produto comercial integral.
+
+Complementar: `juridico-ia-tcc-scope.mdc`.
 
 ## Sempre
 
-- backend-first, governance-first, runtime-first, operational-first
-- derived-state-first (PostgreSQL, projeções, MVs, resolvers)
+- backend-first, governance-first, runtime-first, operational-first (no sentido de execução real, não de OS enterprise legado)
+- derived-state-first (PostgreSQL, projeções, resolvers)
 - context-driven, telemetry-aware, auditability-first
-- zero fake data, zero shadow systems, zero duplicação de governança/RBAC/contexto
+- zero fake data operacional, zero shadow systems, zero duplicação de RBAC/contexto
+- LGPD e privilégio jurídico by design; IA assistiva com fontes e confirmação humana
 
 ## Nunca (sem aprovação explícita)
 
 - novo Source of Truth paralelo
-- reescrita de módulos legados
+- reescrita ampla sem necessidade
 - engines genéricas / orchestration exagerada
 - dashboards ou AI decorativos
 - bypass RLS, bypass RBAC, impersonation
-- Phase 41+ enquanto hardening da fase corrente (ex.: 40K) não estiver **validado**
+- ampliar além do escopo TCC (ver `juridico-ia-tcc-scope.mdc` e EAP §8)
 
 ## Gate de decisão
 
 Antes de implementar, responder:
 
-> “Isso aproxima o Juridico-IA de um OS enterprise operacional governado por contexto, execução, telemetria e governança contínua?”
+> “Isso aproxima o Juridico-IA do protótipo TCC (Foundation + jornada cognitiva Mission Control / Cockpit / Decision Workspace + IA governada + evidências), com segurança, auditoria e decisão humana?”
 
 Se **não** → não implementar.
 
 ## Entrega mínima (artefatos)
 
-Objetivo arquitetural, impactos (governança, runtime, telemetry, UX, workforce, reconciliation), riscos, estratégia incremental, compatibilidade legado, migrations/APIs/guards, RBAC/RLS, testes, rollout, rollback.
+Objetivo, impactos (governança, runtime, UX cognitiva, auditoria), riscos, estratégia incremental, migrations/APIs/guards, RBAC/RLS, testes, rastreabilidade EAP, rollback documentado.
 
-## Sequência atual (2026)
+## Sequência atual (TCC)
 
-1. **Fechar 40J/40K** (platform admin hardening, grants explícitos, menu/E2E, readiness)
-2. Documentar roadmap 41+
-3. Primeiro incremento 41: Governance State Engine V1 **read-only** (ou equivalente derivado)
+1. **Foundation / GAP-CLOSURE** (IAM, RLS, auditoria, idempotência, outbox, CI, shell)
+2. Após autorização explícita, **domínio jurídico mínimo** EAP **1.5.3** (clientes, partes e matérias estritamente necessários; sem fake data operacional)
+3. **Jornada cognitiva mínima** EAP **1.5.4–1.5.7** (Mission Control, Cockpit, Decision Workspace, IA contextual com fontes), apoiada no domínio 1.5.3
+4. **Evidências acadêmicas** EAP **1.6.x**
+5. **Ambiente de demonstração** EAP **1.5.9**
+
+Sprint 1+ e FutureScope (incl. Sprints 9–11) só com autorização explícita.

@@ -1,11 +1,11 @@
 ---
-description: Security — authz, tenant isolation, PII/PHI, secrets, validation, and high-risk flow scrutiny
+description: Security — authz, tenant isolation, PII/privilégio jurídico, secrets, validation, and high-risk flow scrutiny
 alwaysApply: true
 ---
 
 # Security
 
-- Treat as **high-risk**: authentication, authorization, tenant isolation, payments, PII/PHI, and export flows.
+- Treat as **high-risk**: authentication, authorization, tenant isolation, LGPD, PII, privileged legal content (privilégio jurídico), and export flows.
 - Require explicit permission checks. Do not infer access from UI hiding or from an empty list.
 - Validate all inputs at boundaries. Handle outputs safely (escape, mask, minimize).
 - Never expose internal errors, stack traces, or driver messages directly to clients.

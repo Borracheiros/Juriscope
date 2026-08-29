@@ -1,24 +1,43 @@
 ---
-description: Premissa geral — nunca perguntar quando uma opção está marcada como recommended
+description: Premissa geral — assumir opção recomendada só em decisões reversíveis dentro do escopo
 alwaysApply: true
 ---
 
 # Escolha automática da opção recomendada
 
-## Premissa (obrigatória)
+## Premissa
 
-Quando o agente apresentar (ou internamente considerar) decisões com opções e uma delas estiver marcada como recommended / preferida / recomendada, **não perguntar ao usuário**.
+Quando o agente apresentar (ou internamente considerar) decisões com opções e uma delas estiver marcada como recommended / preferida / recomendada, **não perguntar ao usuário** — **desde que** a escolha seja:
 
-- **Assumir** essa opção imediatamente.
-- **Prosseguir** com implementação, commit/push ou próximo passo conforme o fluxo já combinado.
-- **Não** usar AskQuestion, questionários, nem “confirma?” só para validar a opção recomendada.
+- **reversível**;
+- **dentro do escopo** já autorizado (TCC / fase / prompt);
+- **não destrutiva**.
+
+Assumir a opção recomendada e prosseguir com o próximo passo técnico (implementação, plano, validação).
+
+## Nunca autorizado automaticamente
+
+Mesmo com opção “recommended”, **exigir pedido explícito do usuário** para:
+
+- `git commit`
+- `git push` / publicação remota
+- deploy / go-live
+- migração destrutiva, DROP, wipe de dados
+- ampliar escopo (Sprint 1+, FutureScope, módulos skeleton → operacional)
+- chamar provedores externos de IA ou usar dados reais
 
 ## Quando ainda perguntar
 
-Somente se **nenhuma** opção for claramente recomendada **e** a decisão for bloqueante (ambiguidade real, risco destrutivo, ou escolha de produto sem default no contexto).
+- Nenhuma opção claramente recomendada **e** a decisão for bloqueante
+- Ambiguidade real de produto/arquitetura sem default no contexto
+- Risco destrutivo ou fora do escopo TCC
 
-## Exemplos neste repositório
+## Exemplos válidos
 
-- Density polish: se o escopo standard for first-fold + details + 1 primary (Recommended) → aplicar sem perguntar.
-- Commit/push por round em main já confirmado no fluxo contínuo → não re-perguntar a cada round.
-- “Prossiga” → continuar o próximo hotspot elegível do census com o padrão density-2, sem menu de confirmação.
+- Escopo de polish UI já delimitado (first-fold + 1 CTA) → aplicar sem perguntar
+- “Prossiga” no próximo hotspot elegível **já** autorizado pelo prompt → continuar
+
+## Exemplos inválidos (não assumir)
+
+- “Commit/push por round em main”
+- Qualquer fluxo contínuo que implique commit ou push sem novo pedido explícito

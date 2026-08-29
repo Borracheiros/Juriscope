@@ -5,45 +5,67 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const SKIP = new Set(["node_modules", ".git", "dist", ".next", "coverage", "docker/postgres-data"]);
+const SKIP_DIRS = new Set(["node_modules", ".git", "dist", ".next", "coverage", "docker/postgres-data"]);
+const BEGIN = "SECRET_SCAN_ALLOW_SYNTHETIC_BEGIN";
+const END = "SECRET_SCAN_ALLOW_SYNTHETIC_END";
+
 const PATTERNS = [
   { id: "pem", re: /-----BEGIN (?:RSA )?PRIVATE KEY-----/ },
   { id: "aws", re: /AKIA[0-9A-Z]{16}/ },
   { id: "generic-secret", re: /(?:api[_-]?key|secret|password|token)\s*[:=]\s*['"][^'"]{12,}['"]/i },
+  { id: "sql-password", re: /\bPASSWORD\s+'[^']+'/i },
+  { id: "pg-url-credentials", re: /postgres(?:ql)?:\/\/[^/\s:]+:[^@\s/]+@/i },
 ];
 
-const ALLOW = [
-  path.normalize("apps/api/test/fixtures.ts"),
-  path.normalize("apps/api/test/foundation.test.ts"),
-  path.normalize(".env.example"),
-];
+function stripAllowed(text) {
+  const re = new RegExp(`${BEGIN}[\\s\\S]*?${END}`, "g");
+  return text.replace(re, "");
+}
 
-let hits = 0;
+function scanText(text, relPath = "<memory>") {
+  const cleaned = stripAllowed(text);
+  const hits = [];
+  for (const p of PATTERNS) {
+    if (p.re.test(cleaned)) {
+      hits.push({ id: p.id, path: relPath });
+    }
+  }
+  return hits;
+}
 
-function walk(dir) {
+function shouldScanFile(name) {
+  return /\.(ts|tsx|js|cjs|mjs|json|yml|yaml|md|env|sql|sh|example)$/i.test(name) || name === ".env.example";
+}
+
+function walk(dir, hits) {
   for (const name of fs.readdirSync(dir)) {
-    if (SKIP.has(name)) continue;
+    if (SKIP_DIRS.has(name)) continue;
     const full = path.join(dir, name);
-    const rel = path.relative(ROOT, full);
+    const rel = path.relative(ROOT, full).replace(/\\/g, "/");
     const st = fs.statSync(full);
     if (st.isDirectory()) {
-      walk(full);
+      walk(full, hits);
       continue;
     }
-    if (!/\.(ts|tsx|js|cjs|mjs|json|yml|yaml|md|env)$/i.test(name)) continue;
-    if (ALLOW.some((a) => rel.replace(/\\/g, "/").endsWith(a.replace(/\\/g, "/")))) continue;
+    if (!shouldScanFile(name) && !rel.endsWith(".env.example")) continue;
     const text = fs.readFileSync(full, "utf8");
-    for (const p of PATTERNS) {
-      if (p.re.test(text)) {
-        console.error(`[secret-scan] ${p.id} in ${rel}`);
-        hits += 1;
-      }
-    }
+    hits.push(...scanText(text, rel));
   }
 }
 
-walk(ROOT);
-if (hits > 0) {
-  process.exit(1);
+function scanRepository(root = ROOT) {
+  const hits = [];
+  walk(root, hits);
+  return hits;
 }
-console.log("secret-scan: ok");
+
+module.exports = { PATTERNS, stripAllowed, scanText, scanRepository, BEGIN, END };
+
+if (require.main === module) {
+  const hits = scanRepository();
+  for (const h of hits) {
+    console.error(`[secret-scan] ${h.id} in ${h.path}`);
+  }
+  if (hits.length > 0) process.exit(1);
+  console.log("secret-scan: ok");
+}

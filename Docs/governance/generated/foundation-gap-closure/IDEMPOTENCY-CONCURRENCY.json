@@ -1,0 +1,19 @@
+{
+  "operation": "POST /v1/ops/heartbeat",
+  "reservation": "INSERT idempotency_keys (tenant_id, operation, key) ON CONFLICT DO NOTHING then FOR UPDATE",
+  "hashInput": "METHOD + newline + route + newline + JSON.stringify(payload)",
+  "hashDoesNotIncludeKey": true,
+  "states": ["IN_PROGRESS", "COMPLETED"],
+  "sequentialReplay": { "sameKeySamePayload": 200, "sameAuditId": true },
+  "incompatiblePayload": { "http": 409, "code": "IDEMPOTENCY_CONFLICT" },
+  "otherTenantSameKey": { "allowed": true, "distinctAuditId": true },
+  "concurrency10": {
+    "requests": 10,
+    "allHttp200": true,
+    "uniqueAuditIds": 1,
+    "uniqueOutboxRowsForAuditId": 1,
+    "uniqueViolationExposed": false,
+    "sleeps": "none; lock wait only"
+  },
+  "intermediateFailure": "beginIdempotent updates COMPLETED only after run() succeeds; rollback drops IN_PROGRESS row"
+}

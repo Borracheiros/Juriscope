@@ -1,0 +1,15 @@
+{
+  "auditDate": "2026-08-26",
+  "head": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "tests": [
+    { "command": "docker version", "exitCode": 0, "result": "PASS", "evidence": "Client 29.7.2; Server Docker Desktop 4.86.0; Engine 29.7.2" },
+    { "command": "docker ps", "exitCode": 0, "result": "PASS", "evidence": "Docker engine accessible" },
+    { "command": "npm run test -w @juridico-ia/api", "exitCode": 0, "result": "PASS", "counts": { "passed": 12, "failed": 0, "skipped": 0 } },
+    { "command": "npm run test -w @juridico-ia/worker", "exitCode": 0, "result": "PASS", "counts": { "passed": 5, "failed": 0, "skipped": 0 } },
+    { "command": "npm run secret-scan", "exitCode": 0, "result": "PASS", "output": "secret-scan: ok" },
+    { "command": "npm run secret-scan:test", "exitCode": 0, "result": "PASS", "output": "secret-scan tests: ok" },
+    { "command": "npm run typecheck", "exitCode": 0, "result": "PASS" },
+    { "command": "git diff --check", "exitCode": 0, "result": "PASS_WITH_LINE_ENDING_WARNINGS" },
+    { "command": "npm run audit:deps", "exitCode": 0, "result": "PASS_AT_CRITICAL_THRESHOLD", "vulnerabilities": { "critical": 0, "high": 3, "moderate": 10, "total": 13 } }
+  ]
+}

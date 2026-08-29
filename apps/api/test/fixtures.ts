@@ -2,8 +2,6 @@ import { hash } from "bcryptjs";
 import pg from "pg";
 import { PROFILE_CAPABILITIES } from "@juridico-ia/contracts";
 
-export const SYNTHETIC_PASSWORD = "SyntheticPass1!";
-
 const TENANT_A = "11111111-1111-4111-8111-111111111111";
 const TENANT_B = "22222222-2222-4222-8222-222222222222";
 const USER_A = "11111111-1111-4111-8111-1111111111aa";
@@ -12,6 +10,21 @@ const PROF_A = "11111111-1111-4111-8111-1111111111a1";
 const PROF_B = "22222222-2222-4222-8222-2222222222b1";
 const ADMIN_A = "11111111-1111-4111-8111-1111111111a2";
 const USER_ADMIN_A = "11111111-1111-4111-8111-1111111111a3";
+
+/* SECRET_SCAN_ALLOW_SYNTHETIC_BEGIN */
+export const SYNTHETIC_PASSWORD = "SyntheticPass1!";
+/* SECRET_SCAN_ALLOW_SYNTHETIC_END */
+
+export const ids = {
+  tenantA: TENANT_A,
+  tenantB: TENANT_B,
+  userA: USER_A,
+  userB: USER_B,
+  adminA: USER_ADMIN_A,
+  profileA: PROF_A,
+  profileB: PROF_B,
+  adminProfileA: ADMIN_A,
+};
 
 export const fixtures = {
   tenantA: { id: TENANT_A, slug: "escritorio-alpha", email: "lawyer.alpha@example.test", adminEmail: "admin.alpha@example.test" },

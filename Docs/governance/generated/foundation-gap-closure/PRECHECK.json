@@ -1,0 +1,24 @@
+{
+  "phase": "FOUNDATION-GAP-CLOSURE",
+  "generatedAt": "2026-08-26T21:30:00-03:00",
+  "cwd": "E:\\TCC\\Juridico-IA",
+  "absolutePath": "E:\\TCC\\Juridico-IA",
+  "branch": "master",
+  "head": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "headSubject": "feat(foundation): bootstrap modular multi-tenant Juridico-IA",
+  "origin": "ABSENT",
+  "baselineRequired": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "baselineMatchesHead": true,
+  "node": "v22.18.0",
+  "npm": "10.9.3",
+  "docker": "29.7.2",
+  "postgresScratchImage": "pgvector/pgvector:pg16",
+  "postgresScratchImageId": "ccc6e83d6e35",
+  "packageLockAtStart": "deleted in working tree then restored from HEAD via git checkout HEAD -- package-lock.json; later updated by npm install of eslint",
+  "workingTreeAtGapClosureStartAfterLockRestore": "clean (## master)",
+  "notes": [
+    "Codex independent audit verdict was JURIDICO_IA_FOUNDATION_CODEX_AUDIT_FAILED_WITH_ACTIONABLE_EVIDENCE",
+    "This precheck records the Cursor gap-closure environment, not a new independent audit",
+    "No origin remote; no push possible/executed"
+  ]
+}

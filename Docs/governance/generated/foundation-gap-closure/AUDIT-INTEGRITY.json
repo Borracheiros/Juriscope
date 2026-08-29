@@ -1,0 +1,18 @@
+{
+  "requiredFields": ["tenant_id", "actor_user_id", "action", "entity", "entity_id", "result", "created_at", "correlation_id", "origin"],
+  "sanitization": {
+    "forbiddenMetadataKeys": ["password", "token", "cookie", "secret", "prompt", "authorization", "cpf"],
+    "stringTruncation": 200
+  },
+  "eventsProven": [
+    { "action": "identity.login", "result": "SUCCESS" },
+    { "action": "ops.heartbeat", "result": "SUCCESS", "noSensitiveInListBody": true },
+    { "action": "authorization.denied", "result": "DENIED" },
+    { "action": "identity.logout", "result": "SUCCESS", "note": "best-effort on logout" }
+  ],
+  "appRoleCannotMutate": {
+    "updateSqlstate": "42501",
+    "deleteSqlstate": "42501",
+    "separateTransactions": true
+  }
+}

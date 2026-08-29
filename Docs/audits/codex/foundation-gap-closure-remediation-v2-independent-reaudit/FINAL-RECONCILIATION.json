@@ -1,0 +1,18 @@
+{
+  "verdict": "JURIDICO_IA_FOUNDATION_CODEX_AUDIT_INCOMPLETE_WITH_OPEN_GAPS",
+  "foundationApproved": false,
+  "f01Closed": true,
+  "functionalRegressionFound": false,
+  "openGaps": [
+    "G-01: independent PostgreSQL-backed execution unavailable due to Docker engine permission",
+    "G-02: prior independent audit artifact modified by implementation agent"
+  ],
+  "requiredNextStep": "Run or expose the API and worker suites to Codex with Docker access, and preserve completed Codex audit packages as append-only evidence.",
+  "checksumReportedByHandoff": "2a5245d95497f96652472fc9d34b3586a351cb8272e40e75c9832199f067dcfc",
+  "actions": {
+    "commit": "NOT_EXECUTED",
+    "push": "NOT_EXECUTED",
+    "deploy": "NOT_EXECUTED",
+    "sprint1": "NOT_STARTED"
+  }
+}

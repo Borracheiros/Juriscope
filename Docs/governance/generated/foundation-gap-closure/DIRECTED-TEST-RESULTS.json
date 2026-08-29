@@ -1,0 +1,235 @@
+{
+  "order": [
+    "static analysis / lint / typecheck",
+    "unit: config, domain, security, contracts, web",
+    "scratch: api foundation, worker outbox",
+    "web build",
+    "secret-scan",
+    "npm audit (no upgrade)",
+    "aggregate npm test once"
+  ],
+  "commands": [
+    {
+      "name": "config-test",
+      "command": "npm run test -w @juridico-ia/config",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:22:24-03:00",
+      "exitCode": 0,
+      "durationMs": 5781,
+      "files": ["packages/config/src/index.test.ts"],
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "domain-test",
+      "command": "npm run test -w @juridico-ia/domain",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:22:30-03:00",
+      "exitCode": 0,
+      "durationMs": 1673,
+      "files": ["packages/domain/src/domain.test.ts"],
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "notes": "asserts DomainError.code not message text"
+    },
+    {
+      "name": "security-test",
+      "command": "npm run test -w @juridico-ia/security",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:22:31-03:00",
+      "exitCode": 0,
+      "durationMs": 1582,
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "contracts-test",
+      "command": "npm run test -w @juridico-ia/contracts",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:22:33-03:00",
+      "exitCode": 0,
+      "durationMs": 1611,
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "web-test",
+      "command": "npm run test -w @juridico-ia/web",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:22:35-03:00",
+      "exitCode": 0,
+      "durationMs": 12806,
+      "files": ["apps/web/components/StatusView.test.tsx"],
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "secret-scan",
+      "command": "npm run secret-scan",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:22:47-03:00",
+      "exitCode": 0,
+      "durationMs": 487,
+      "tests": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null
+    },
+    {
+      "name": "lint-api",
+      "command": "npm run lint -w @juridico-ia/api",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:23:00-03:00",
+      "exitCode": 0,
+      "durationMs": 18787
+    },
+    {
+      "name": "lint-web-first-attempt",
+      "command": "npm run lint -w @juridico-ia/web",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:23:18-03:00",
+      "exitCode": 1,
+      "durationMs": 20947,
+      "notes": "2 warnings with --max-warnings 0; fixed then re-run"
+    },
+    {
+      "name": "typecheck-first-attempt",
+      "command": "npm run typecheck",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:23:39-03:00",
+      "exitCode": 2,
+      "durationMs": 16709,
+      "notes": "API dynamic import extension; worker test importing api under rootDir — fixed then re-run"
+    },
+    {
+      "name": "lint-web",
+      "command": "npm run lint -w @juridico-ia/web",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:26:07-03:00",
+      "exitCode": 0,
+      "durationMs": 3140
+    },
+    {
+      "name": "typecheck",
+      "command": "npm run typecheck",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:26:10-03:00",
+      "exitCode": 0,
+      "durationMs": 12489
+    },
+    {
+      "name": "api-test-first-attempt",
+      "command": "npm run test -w @juridico-ia/api",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:26:36-03:00",
+      "exitCode": 1,
+      "durationMs": 22903,
+      "files": ["apps/api/test/foundation.test.ts"],
+      "tests": 10,
+      "passed": 9,
+      "failed": 1,
+      "skipped": 0,
+      "notes": "DELETE audit in aborted TX after UPDATE 42501 produced 25P02; split transactions"
+    },
+    {
+      "name": "api-test",
+      "command": "npm run test -w @juridico-ia/api",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:27:21-03:00",
+      "exitCode": 0,
+      "durationMs": 5989,
+      "files": ["apps/api/test/foundation.test.ts"],
+      "tests": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "worker-test",
+      "command": "npm run test -w @juridico-ia/worker",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:27:27-03:00",
+      "exitCode": 0,
+      "durationMs": 4175,
+      "files": ["apps/worker/test/outbox.test.ts"],
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "web-build",
+      "command": "npm run build -w @juridico-ia/web",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:27:49-03:00",
+      "exitCode": 0,
+      "durationMs": 53981
+    },
+    {
+      "name": "npm-audit",
+      "command": "npm audit --json",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:28:43-03:00",
+      "exitCode": 1,
+      "durationMs": 2526,
+      "notes": "exit 1 because high advisories exist; documented, no fix --force"
+    },
+    {
+      "name": "aggregate-test",
+      "command": "npm test",
+      "cwd": "E:\\TCC\\Juridico-IA",
+      "startedAt": "2026-08-26T21:29:17-03:00",
+      "exitCode": 0,
+      "durationMs": 16884,
+      "tests": 28,
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0,
+      "breakdown": {
+        "api": 10,
+        "web": 2,
+        "worker": 1,
+        "config": 6,
+        "contracts": 2,
+        "domain": 5,
+        "security": 2
+      }
+    }
+  ],
+  "notExecuted": [
+    {
+      "what": "Browser E2E / Playwright / Cypress",
+      "why": "Not in Foundation repo; prompt forbade broad E2E; only minimal navigation policy"
+    },
+    {
+      "what": "next start + HTTP curl of :3000 as long-running process",
+      "why": "A04 proven via next build; keeping a server was out of directed gates"
+    },
+    {
+      "what": "packages/design-system, observability, testing unit suites",
+      "why": "no test script in those workspaces (--if-present skips)"
+    },
+    {
+      "what": "npm audit fix / major upgrades",
+      "why": "explicitly forbidden without decision; documented in DEPENDENCY-SECURITY.json"
+    },
+    {
+      "what": "git object-level secret scan of pack history",
+      "why": "working-tree scanner used; history is one commit"
+    },
+    {
+      "what": "destructive migration rollback",
+      "why": "document-only"
+    }
+  ]
+}

@@ -1,9 +1,9 @@
-import { loadEnv } from "@juridico-ia/config";
+import { loadMigratorEnv } from "@juridico-ia/config";
 import { pendingCount, runMigrations, schemaFingerprint, showMigrations } from "./migrator";
 
 async function main() {
   const cmd = process.argv[2] ?? "show";
-  const env = loadEnv(process.env);
+  const env = loadMigratorEnv(process.env);
   if (cmd === "run") {
     const result = await runMigrations(env.DATABASE_URL);
     console.log(JSON.stringify({ ...result, fingerprint: schemaFingerprint() }));
@@ -27,6 +27,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error(err);
+  console.error((err as Error).message);
   process.exit(1);
 });

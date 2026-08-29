@@ -1,0 +1,23 @@
+{
+  "phase": "FOUNDATION-GAP-CLOSURE-REMEDIATION",
+  "baselineHead": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "finalHead": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "workingTree": "DIRTY",
+  "productCodeChanged": true,
+  "commit": "NOT_EXECUTED",
+  "push": "NOT_EXECUTED",
+  "deploy": "NOT_EXECUTED",
+  "Sprint1": "NOT_STARTED",
+  "externalProvidersCalled": false,
+  "sharedDatabaseUsed": false,
+  "realLegalDataUsed": false,
+  "findingsClosed": ["P0-01", "P1-01", "A25-scanner", "P2-01", "P2-02"],
+  "cursorVerdict": "JURIDICO_IA_FOUNDATION_GAP_CLOSURE_READY_FOR_INDEPENDENT_AUDIT",
+  "cursorCannotSelfApprove": true,
+  "residuals": [
+    "Independent auditor must re-run scratch (Codex previously lacked container runtime)",
+    "DLQ/broker still deferred",
+    "npm audit high advisories from Nest/Next majors still documented, not upgraded",
+    "Compose local requires OWNER_PASSWORD/APP_PASSWORD/WORKER_PASSWORD in the environment"
+  ]
+}

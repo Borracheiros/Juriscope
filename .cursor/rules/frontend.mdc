@@ -11,9 +11,10 @@ alwaysApply: false
 - Shared components must be generic, reusable, and documented. Prefer design-system or shared primitives over one-off visuals.
 - Validate forms and API responses with schemas. Prefer typed hooks and typed service layers.
 - Avoid deeply coupled state. Keep state local unless multiple features truly share it.
-- Handle loading, empty, error, and success states explicitly on every data-backed view.
+- Handle loading, empty, not_collected, stale, partial, forbidden, error, invalid_contract, and ready states explicitly on every data-backed view.
 - Accessibility is mandatory for forms, dialogs, tables, and navigation.
-- Do not duplicate backend business rules that can drift (authorization, pricing, eligibility, legal calculations). The UI may reflect them; the backend remains the source of truth.
+- Cognitive surfaces (when in scope): Legal Mission Control, Client & Matter Cockpit, Legal Decision Workspace — progressive disclosure, one dominant CTA, human confirmation on decisions/AI.
+- Do not duplicate backend business rules that can drift (authorization, eligibility, legal calculations). The UI may reflect them; the NestJS API remains the source of truth. Paths: `apps/web/**`.
 
 ```text
 ❌ Page with ORM-like logic and ad hoc styles

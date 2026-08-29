@@ -29,9 +29,9 @@ Layered boundaries: **presentation → application → domain → infrastructure
 
 - TypeScript strict mode. Validate all inputs at boundaries.
 - AuthN + AuthZ on every endpoint unless explicitly public.
-- Every write is auditable.
+- Every write is auditable (LGPD-safe: no secrets, no privileged document body).
 - External integrations need timeout, retry, and error mapping.
-- DB changes need migration, rollback notes, and tests.
+- DB changes need migration, rollback notes, and tests. Prefer parameterized SQL; no TypeORM.
 
 ## Frontend
 
@@ -45,7 +45,7 @@ Layered boundaries: **presentation → application → domain → infrastructure
 
 - Never hardcode secrets. Apply least privilege. Sanitize inputs and escape outputs where required.
 - Flag eval, dynamic code execution, unsafe SQL, insecure deserialization, or weak crypto.
-- Call out security impact for auth, permissions, billing, healthcare, finance, PII, and tenant isolation.
+- Call out security impact for auth, permissions, billing, finance, LGPD, PII, privileged legal content, and tenant isolation.
 
 ## Auditing and observability
 

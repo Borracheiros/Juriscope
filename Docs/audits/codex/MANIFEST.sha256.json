@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "algorithm": "sha256",
+  "scope": "Docs/audits/codex",
+  "fileCount": 24,
+  "files": [
+    {
+      "path": "foundation-gap-closure-independent-audit/ACCEPTANCE-MATRIX-A01-A30.json",
+      "bytes": 1269,
+      "sha256": "669d0d398fb04130d1420dd129ad0651ef7af3f74b9ec999fa593da2018e4b0b"
+    },
+    {
+      "path": "foundation-gap-closure-independent-audit/DIRECTED-TESTS.json",
+      "bytes": 1002,
+      "sha256": "8f5d3ec7344deb7392bb8c8bd1dd32d6f435477329ea33e539f0b05863e78c89"
+    },
+    {
+      "path": "foundation-gap-closure-independent-audit/FINAL-RECONCILIATION.json",
+      "bytes": 685,
+      "sha256": "8a770a7537e8af9db4b494a6621ee30fa5043103a4751c1c94240a6086eaf355"
+    },
+    {
+      "path": "foundation-gap-closure-independent-audit/FINDINGS.md",
+      "bytes": 2383,
+      "sha256": "32bd4b0af211ce679b98f1170b5577b24fec415cd12b41ae6bea45aa33f0d7a5"
+    },
+    {
+      "path": "foundation-gap-closure-independent-audit/README.md",
+      "bytes": 301,
+      "sha256": "f845a63944a646820e67b0d1bd185ca4a17176b3ea4bc02ef6491353cc7d898d"
+    },
+    {
+      "path": "foundation-gap-closure-independent-audit/STOP.md",
+      "bytes": 1735,
+      "sha256": "5fe72f30f50d9cfd9cbf533aa65545f189766178bf0714fd6f80304b9834c97d"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-independent-audit/ACCEPTANCE-MATRIX-A01-A30.json",
+      "bytes": 1080,
+      "sha256": "7c73873e0125dcf3af88f77f2e5880834a09cb8d3b436147a3e28d7c85dde2b0"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-independent-audit/DIRECTED-TESTS.json",
+      "bytes": 1455,
+      "sha256": "3f861c050e1aa33b571c39a3460e719c395afbce20731156c1c54d7e8ff2f6ca"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-independent-audit/FINAL-RECONCILIATION.json",
+      "bytes": 963,
+      "sha256": "eee24dda80cb245c67a76492aab20e5a653a7ca7d5e5ac69b88a76e27b0a2b34"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-independent-audit/FINDINGS.md",
+      "bytes": 2479,
+      "sha256": "c7e2f9f71ad9ed957d7a230280c8f109e6eb69ab297a16f1b8f4f818f1a735dd"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-independent-audit/README.md",
+      "bytes": 395,
+      "sha256": "a1033b6952ea567492f1fcde8c8ac63c7b5d96ed9ea0b4e90a790ecbe8aa96f8"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-independent-audit/STOP.md",
+      "bytes": 508,
+      "sha256": "a4dc78ac372ca4473a241a46be8f392206309f5a5648c2d2f6810c25ca22a1d8"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-docker-reaudit/ACCEPTANCE-MATRIX-A01-A30.json",
+      "bytes": 747,
+      "sha256": "c8ba51dc3687b148832fd5c9d0a8c31691948bf11c042761d4c3c17e5c32287a"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-docker-reaudit/DIRECTED-TESTS.json",
+      "bytes": 1204,
+      "sha256": "e52a098296db6b2394bb5b6d2d21c919730fb974d4f7abfe0413df533f885916"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-docker-reaudit/FINAL-RECONCILIATION.json",
+      "bytes": 873,
+      "sha256": "f128a79d49f97a8aa626769c4ca4f23eb7fb5b1407784d75e4a648654316bd2a"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-docker-reaudit/FINDINGS.md",
+      "bytes": 1883,
+      "sha256": "bfe7b1d64c40110e70f955fcad7463e612825e8373288b1216ba2bd4fc266806"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-docker-reaudit/README.md",
+      "bytes": 434,
+      "sha256": "83630a764a9780807d1e4b6233b1612604fcab4d74a0be41150c5da1a6a85cb2"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-docker-reaudit/STOP.md",
+      "bytes": 458,
+      "sha256": "1df3ed538535681716ea330e6a1d87a354a905f653d7dd4c09ee76f699b507bd"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-independent-reaudit/ACCEPTANCE-MATRIX-A01-A30.json",
+      "bytes": 666,
+      "sha256": "e00d853bea651670881c9eabd2a5c1ea64fe50a863aaf03a69fc9df0ea10d43b"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-independent-reaudit/DIRECTED-TESTS.json",
+      "bytes": 1194,
+      "sha256": "8d4073ebcaa0ca95116f157b93d0bafb81a9ed88a2d78170e4ec462f81d04d44"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-independent-reaudit/FINAL-RECONCILIATION.json",
+      "bytes": 765,
+      "sha256": "4934cbb79e265ba2e41e565bf43fe34f7b25f287db55d18ee440a79fbc36893c"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-independent-reaudit/FINDINGS.md",
+      "bytes": 2342,
+      "sha256": "38d46e06c0777bebff5fbf7dca222f0086655c0c67dae23c9ec2bf5cb95201e0"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-independent-reaudit/README.md",
+      "bytes": 410,
+      "sha256": "38fc5e26b57a48030526e54d81849aa2e61a12a55599cda6a85f1a1137e03a10"
+    },
+    {
+      "path": "foundation-gap-closure-remediation-v2-independent-reaudit/STOP.md",
+      "bytes": 536,
+      "sha256": "fbc327297f2619eecd4f70ab4114af4110b0aa3c7ee5705136b4c8566cab4497"
+    }
+  ]
+}

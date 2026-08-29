@@ -1,0 +1,31 @@
+{
+  "phase": "FOUNDATION-GAP-CLOSURE-REMEDIATION-V2",
+  "findingClosed": "F-01",
+  "baselineHead": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "finalHead": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "workingTree": "DIRTY",
+  "productCodeChanged": false,
+  "docsOnlyForF01": true,
+  "commit": "NOT_EXECUTED",
+  "push": "NOT_EXECUTED",
+  "deploy": "NOT_EXECUTED",
+  "Sprint1": "NOT_STARTED",
+  "externalProvidersCalled": false,
+  "sharedDatabaseUsed": false,
+  "realLegalDataUsed": false,
+  "gates": {
+    "secret-scan": 0,
+    "secret-scan:test": 0,
+    "typecheck": 0,
+    "api-test": { "exit": 0, "passed": 12, "skipped": 0 },
+    "worker-test": { "exit": 0, "passed": 5, "skipped": 0 },
+    "git-diff-check": 0
+  },
+  "cursorVerdict": "JURIDICO_IA_FOUNDATION_GAP_CLOSURE_READY_FOR_INDEPENDENT_REAUDIT",
+  "cursorCannotSelfApprove": true,
+  "residuals": [
+    "Documentation that embeds live scanner-matching substrings will fail the scan again — authors must describe patterns without quoting live forms",
+    "Independent Codex re-audit still required",
+    "Prior npm audit high advisories unchanged (out of F-01 scope)"
+  ]
+}

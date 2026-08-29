@@ -4,25 +4,45 @@ import {
   Get,
   HttpCode,
   Inject,
+  Param,
   Post,
   Req,
   Res,
   UnauthorizedException,
   ForbiddenException,
+  ConflictException,
+  NotFoundException,
+  HttpException,
 } from "@nestjs/common";
 import { loginRequestSchema } from "@juridico-ia/contracts";
-import type { Capability } from "@juridico-ia/contracts";
-import { PROFILE_CAPABILITIES, type AccessProfileCode } from "@juridico-ia/contracts";
-import { assertCapability, type Principal } from "@juridico-ia/security";
-import { getCorrelationId } from "@juridico-ia/observability";
+import { rejectClientTenantClaim, type Principal } from "@juridico-ia/security";
 import type { Request, Response } from "express";
-import { randomBytes, createHash } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import { IdentityService } from "./identity.service";
 import { withTenantTx } from "../../../database/pool";
+import { insertAudit } from "../audit/audit.repository";
+import { denyIfUnauthorized, resolvePrincipal } from "../authorization/authorization.service";
+import { canonicalHash, IdempotencyConflictError } from "../idempotency/idempotency.service";
+import { runHeartbeat } from "../ops/heartbeat.use-case";
 import type pg from "pg";
 
 const COOKIE = "jid";
 const CSRF = "jcsrf";
+
+function rejectSpoofedTenant(req: Request, sessionTenantId?: string) {
+  const claimed =
+    (typeof req.body === "object" && req.body && "tenantId" in req.body ? String((req.body as { tenantId?: string }).tenantId) : undefined) ||
+    (typeof req.query.tenantId === "string" ? req.query.tenantId : undefined) ||
+    req.header("x-tenant-id") ||
+    undefined;
+  if (!claimed) return;
+  if (!sessionTenantId || claimed !== sessionTenantId) {
+    throw new ForbiddenException({ code: "TENANT_CLAIM_REJECTED", message: "Tenant no pedido foi rejeitado" });
+  }
+  if (sessionTenantId) {
+    rejectClientTenantClaim(claimed, sessionTenantId);
+  }
+}
 
 @Controller()
 export class IdentityController {
@@ -32,47 +52,38 @@ export class IdentityController {
     @Inject("COOKIE_SECURE") private readonly cookieSecure: boolean,
   ) {}
 
-  @Get("health")
-  health() {
-    return { status: "ok" as const, service: "api" };
-  }
-
-  @Get("ready")
-  async ready() {
-    try {
-      await this.pool.query("SELECT 1");
-      return { status: "ok" as const, database: "up" as const };
-    } catch {
-      return { status: "degraded" as const, database: "down" as const };
-    }
-  }
-
   @Post("auth/login")
   @HttpCode(200)
-  async login(@Body() body: unknown, @Res({ passthrough: true }) res: Response) {
+  async login(@Body() body: unknown, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    rejectSpoofedTenant(req);
     const parsed = loginRequestSchema.safeParse(body);
     if (!parsed.success) {
       throw Object.assign(new Error("VALIDATION_ERROR"), { code: "VALIDATION_ERROR" });
     }
     try {
       const session = await this.identity.login(parsed.data.email, parsed.data.password, parsed.data.tenantSlug);
-      const token = await this.identity.signSession(session);
+      const token = await this.identity.signSession({ userId: session.userId, tenantId: session.tenantId });
       const csrf = randomBytes(24).toString("hex");
       this.setAuthCookies(res, token, csrf);
-      await withTenantTx(this.pool, session.tenantId, async (client) => {
-        await client.query(
-          `INSERT INTO audit_events (tenant_id, actor_user_id, action, entity, entity_id, correlation_id, metadata)
-           VALUES ($1,$2,'identity.login','user',$3,$4,$5)`,
-          [session.tenantId, session.userId, session.userId, getCorrelationId() ?? null, JSON.stringify({ tenantSlug: session.tenantSlug })],
-        );
+      const principal = await withTenantTx(this.pool, session.tenantId, async (client) => {
+        await insertAudit(client, {
+          tenantId: session.tenantId,
+          actorUserId: session.userId,
+          action: "identity.login",
+          entity: "user",
+          entityId: session.userId,
+          result: "SUCCESS",
+          origin: "password",
+        });
+        return resolvePrincipal(client, session);
       });
       return {
         userId: session.userId,
         tenantId: session.tenantId,
         tenantSlug: session.tenantSlug,
         displayName: session.displayName,
-        profileCode: session.profileCode,
-        capabilities: session.capabilities,
+        profileCode: principal.profileCode,
+        capabilities: principal.capabilities,
       };
     } catch (err) {
       const code = (err as { code?: string }).code;
@@ -85,7 +96,22 @@ export class IdentityController {
 
   @Post("auth/logout")
   @HttpCode(204)
-  logout(@Res({ passthrough: true }) res: Response) {
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    try {
+      const principal = await this.requirePrincipal(req);
+      await withTenantTx(this.pool, principal.tenantId, async (client) => {
+        await insertAudit(client, {
+          tenantId: principal.tenantId,
+          actorUserId: principal.userId,
+          action: "identity.logout",
+          entity: "session",
+          entityId: principal.userId,
+          result: "SUCCESS",
+        });
+      });
+    } catch {
+      /* logout is best-effort */
+    }
     res.clearCookie(COOKIE, { path: "/" });
     res.clearCookie(CSRF, { path: "/" });
   }
@@ -93,11 +119,10 @@ export class IdentityController {
   @Get("me")
   async me(@Req() req: Request) {
     const principal = await this.requirePrincipal(req);
+    rejectSpoofedTenant(req, principal.tenantId);
     return {
       userId: principal.userId,
       tenantId: principal.tenantId,
-      tenantSlug: undefined,
-      displayName: undefined,
       profileCode: principal.profileCode,
       capabilities: principal.capabilities,
     };
@@ -106,11 +131,8 @@ export class IdentityController {
   @Get("directory/users")
   async listUsers(@Req() req: Request) {
     const principal = await this.requirePrincipal(req);
-    try {
-      assertCapability(principal, "admin:manage");
-    } catch {
-      throw new ForbiddenException({ code: "ACCESS_DENIED", message: "Acesso restrito" });
-    }
+    rejectSpoofedTenant(req, principal.tenantId);
+    await denyIfUnauthorized(this.pool, principal, "admin:manage", "user");
     return withTenantTx(this.pool, principal.tenantId, async (client) => {
       const rows = await client.query<{ id: string; email: string; display_name: string }>(
         `SELECT id, email, display_name FROM users ORDER BY email`,
@@ -119,17 +141,28 @@ export class IdentityController {
     });
   }
 
+  @Get("directory/users/:id")
+  async getUser(@Req() req: Request, @Param("id") id: string) {
+    const principal = await this.requirePrincipal(req);
+    rejectSpoofedTenant(req, principal.tenantId);
+    await denyIfUnauthorized(this.pool, principal, "admin:manage", "user");
+    return withTenantTx(this.pool, principal.tenantId, async (client) => {
+      const rows = await client.query(`SELECT id, email, display_name FROM users WHERE id = $1`, [id]);
+      if (!rows.rows[0]) {
+        throw new NotFoundException({ code: "NOT_FOUND", message: "Recurso indisponível" });
+      }
+      return rows.rows[0];
+    });
+  }
+
   @Get("audit")
   async listAudit(@Req() req: Request) {
     const principal = await this.requirePrincipal(req);
-    try {
-      assertCapability(principal, "audit:read");
-    } catch {
-      throw new ForbiddenException({ code: "ACCESS_DENIED", message: "Acesso restrito" });
-    }
+    rejectSpoofedTenant(req, principal.tenantId);
+    await denyIfUnauthorized(this.pool, principal, "audit:read", "audit");
     return withTenantTx(this.pool, principal.tenantId, async (client) => {
       const rows = await client.query(
-        `SELECT id, action, entity, entity_id, correlation_id, created_at
+        `SELECT id, action, entity, entity_id, result, correlation_id, created_at
          FROM audit_events ORDER BY created_at DESC LIMIT 50`,
       );
       return rows.rows;
@@ -137,43 +170,25 @@ export class IdentityController {
   }
 
   @Post("ops/heartbeat")
-  async heartbeat(@Req() req: Request) {
+  @HttpCode(200)
+  async heartbeat(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const principal = await this.requirePrincipal(req);
+    rejectSpoofedTenant(req, principal.tenantId);
     this.assertCsrf(req);
     const key = req.header("idempotency-key");
-    const operation = "ops.heartbeat";
-    return withTenantTx(this.pool, principal.tenantId, async (client) => {
-      if (key) {
-        const existing = await client.query(
-          `SELECT response_body, response_status FROM idempotency_keys
-           WHERE tenant_id = $1 AND operation = $2 AND key = $3`,
-          [principal.tenantId, operation, key],
-        );
-        if (existing.rows[0]) {
-          return existing.rows[0].response_body;
-        }
-      }
-      const inserted = await client.query<{ id: string }>(
-        `INSERT INTO audit_events (tenant_id, actor_user_id, action, entity, entity_id, correlation_id, after_state)
-         VALUES ($1,$2,'ops.heartbeat','session',$3,$4,$5) RETURNING id`,
-        [principal.tenantId, principal.userId, principal.userId, getCorrelationId() ?? null, JSON.stringify({ ok: true })],
+    const hash = canonicalHash("POST", "/v1/ops/heartbeat", req.body ?? {});
+    try {
+      const result = await withTenantTx(this.pool, principal.tenantId, async (client) =>
+        runHeartbeat(client, principal, key, hash),
       );
-      await client.query(
-        `INSERT INTO outbox_events (tenant_id, event_type, payload)
-         VALUES ($1, 'SessionHeartbeat', $2)`,
-        [principal.tenantId, JSON.stringify({ auditId: inserted.rows[0]?.id })],
-      );
-      const body = { ok: true, auditId: inserted.rows[0]?.id };
-      if (key) {
-        const requestHash = createHash("sha256").update(key).digest("hex");
-        await client.query(
-          `INSERT INTO idempotency_keys (tenant_id, key, operation, request_hash, response_status, response_body)
-           VALUES ($1,$2,$3,$4,200,$5)`,
-          [principal.tenantId, key, operation, requestHash, JSON.stringify(body)],
-        );
+      res.status(result.status);
+      return result.body;
+    } catch (err) {
+      if (err instanceof IdempotencyConflictError) {
+        throw new ConflictException({ code: err.code, message: "Chave idempotente incompatível" });
       }
-      return body;
-    });
+      throw err;
+    }
   }
 
   private setAuthCookies(res: Response, token: string, csrf: string) {
@@ -197,15 +212,9 @@ export class IdentityController {
     }
     try {
       const claims = await this.identity.verifySession(token);
-      const capabilities = [...(PROFILE_CAPABILITIES[claims.profileCode as AccessProfileCode] ?? [])] as Capability[];
-      return {
-        userId: claims.userId,
-        tenantId: claims.tenantId,
-        profileId: claims.profileId,
-        profileCode: claims.profileCode,
-        capabilities,
-      };
-    } catch {
+      return withTenantTx(this.pool, claims.tenantId, (client) => resolvePrincipal(client, claims));
+    } catch (err) {
+      if (err instanceof HttpException) throw err;
       throw new UnauthorizedException({ code: "UNAUTHENTICATED", message: "Sessão inválida" });
     }
   }

@@ -1,0 +1,24 @@
+{
+  "verdict": "JURIDICO_IA_FOUNDATION_CODEX_AUDIT_FAILED_WITH_ACTIONABLE_EVIDENCE",
+  "foundationApproved": false,
+  "sprint1Authorized": false,
+  "blockingFindings": [
+    "F-01: secret-scan and secret-scan:test fail against the delivered remediation documentation"
+  ],
+  "independentExecutionLimitations": [
+    "Container runtime unavailable; PostgreSQL-backed worker and API integration tests could not execute"
+  ],
+  "confirmed": [
+    "Typecheck passes",
+    "Recursive audit sanitizer unit tests pass",
+    "Outbox remediation structure and SQL effect idempotency are present",
+    "No whitespace errors reported by git diff --check"
+  ],
+  "requiredNextStep": "Return F-01 to Cursor for a minimal remediation, then submit the complete working tree for another independent audit with a working container runtime.",
+  "actions": {
+    "commit": "NOT_EXECUTED",
+    "push": "NOT_EXECUTED",
+    "deploy": "NOT_EXECUTED",
+    "sprint1": "NOT_STARTED"
+  }
+}

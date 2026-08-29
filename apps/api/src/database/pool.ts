@@ -1,7 +1,14 @@
 import pg from "pg";
 
 export function createPool(url: string): pg.Pool {
-  return new pg.Pool({ connectionString: url, max: 10 });
+  const pool = new pg.Pool({
+    connectionString: url,
+    max: 10,
+    connectionTimeoutMillis: 3_000,
+    idleTimeoutMillis: 10_000,
+  });
+  pool.on("error", () => undefined);
+  return pool;
 }
 
 export async function withTenantTx<T>(

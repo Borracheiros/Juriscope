@@ -1,0 +1,22 @@
+{
+  "phase": "FOUNDATION-GAP-CLOSURE-REMEDIATION",
+  "generatedAt": "2026-08-26T22:04:00-03:00",
+  "cwd": "E:\\TCC\\Juridico-IA",
+  "branch": "master",
+  "head": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "origin": "ABSENT",
+  "parentAudit": "Docs/audits/codex/foundation-gap-closure-independent-audit",
+  "parentVerdict": "JURIDICO_IA_FOUNDATION_CODEX_AUDIT_FAILED_WITH_ACTIONABLE_EVIDENCE",
+  "scope": [
+    "P0-01 outbox handler/effect before PUBLISHED",
+    "P1-01 credentials out of versioned SQL",
+    "P1/A25 secret-scan SQL PASSWORD + pg URL + .env.example",
+    "P2-01 recursive audit sanitize",
+    "P2-02 worker failure/retry/lease/FAILED_PERMANENT proofs",
+    "scratch re-validation"
+  ],
+  "commit": "NOT_EXECUTED",
+  "push": "NOT_EXECUTED",
+  "deploy": "NOT_EXECUTED",
+  "Sprint1": "NOT_STARTED"
+}

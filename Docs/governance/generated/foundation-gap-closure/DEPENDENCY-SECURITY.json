@@ -1,0 +1,61 @@
+{
+  "secretScan": {
+    "command": "npm run secret-scan",
+    "cwd": "E:\\TCC\\Juridico-IA",
+    "startedAt": "2026-08-26T21:22:47-03:00",
+    "exitCode": 0,
+    "durationMs": 487,
+    "scope": "versioned-like working tree files matching ts|tsx|js|cjs|mjs|json|yml|yaml|md|env; skips node_modules .git dist .next coverage docker/postgres-data; skips .env.example",
+    "allowlist": "delimited blocks SECRET_SCAN_ALLOW_SYNTHETIC_BEGIN/END only (not whole-file)",
+    "gitHistory": "single foundation commit 6dc0a25; scanner walks files not pack objects. Residual: object-level history scan not executed."
+  },
+  "npmAudit": {
+    "command": "npm audit --json",
+    "cwd": "E:\\TCC\\Juridico-IA",
+    "startedAt": "2026-08-26T21:28:43-03:00",
+    "exitCode": 1,
+    "durationMs": 2526,
+    "autoUpgrade": false,
+    "metadata": {
+      "info": 0,
+      "low": 0,
+      "moderate": 10,
+      "high": 3,
+      "critical": 0,
+      "total": 13
+    },
+    "highAdvisories": [
+      {
+        "package": "multer",
+        "severity": "high",
+        "chain": "apps/api → @nestjs/platform-express → multer",
+        "runtimeUse": "Nest HTTP adapter; Foundation does not expose file-upload endpoints",
+        "exploitability": "DoS on multipart parsing IF an upload route is added and left unbounded. Not demonstrated as reachable on current Foundation routes (login JSON, heartbeat JSON).",
+        "fixAvailable": "@nestjs/platform-express 11.2.3 (isSemVerMajor true versus Nest 10.x)",
+        "upgradeRisk": "Major Nest 10 → 11; out of this gap-closure without explicit decision",
+        "silentlyApproved": false
+      },
+      {
+        "package": "@nestjs/platform-express",
+        "severity": "high",
+        "chain": "via multer/express/body-parser",
+        "runtimeUse": "API HTTP server",
+        "exploitability": "Inherited from multer; same residual",
+        "fixAvailable": "11.2.3 major",
+        "upgradeRisk": "Major framework bump",
+        "silentlyApproved": false
+      },
+      {
+        "package": "postcss",
+        "severity": "high",
+        "chain": "apps/web → next → postcss",
+        "runtimeUse": "Next/CSS build pipeline; not a direct user-upload CSS parser in Foundation UI",
+        "exploitability": "Advisories involve sourceMappingURL / stringify. Requires attacker-controlled CSS into PostCSS with `from` unset. Next build of first-party CSS is the current path — not treated as automatically exploitable in production request handling.",
+        "fixAvailable": "next 16.3.3 (isSemVerMajor true versus Next 15.x)",
+        "upgradeRisk": "Major Next 15 → 16",
+        "silentlyApproved": false
+      }
+    ],
+    "decision": "No major upgrade in this round. High advisories recorded, not certified safe, not auto-approved."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "auditDate": "2026-08-26",
+  "head": "6dc0a25c18b684ff673ee63d0eeb3721974d4952",
+  "tests": [
+    { "command": "npm run secret-scan", "exitCode": 0, "result": "PASS", "output": "secret-scan: ok" },
+    { "command": "npm run secret-scan:test", "exitCode": 0, "result": "PASS", "output": "secret-scan tests: ok" },
+    { "command": "npm run typecheck", "exitCode": 0, "result": "PASS" },
+    {
+      "command": "npm run test -w @juridico-ia/api",
+      "exitCode": 1,
+      "result": "BLOCKED_BY_AUDITOR_ENVIRONMENT",
+      "counts": { "passed": 2, "skipped": 10 },
+      "output": "Could not find a working container runtime strategy"
+    },
+    {
+      "command": "npm run test -w @juridico-ia/worker",
+      "exitCode": 1,
+      "result": "BLOCKED_BY_AUDITOR_ENVIRONMENT",
+      "counts": { "passed": 0, "skipped": 5 },
+      "output": "Could not find a working container runtime strategy"
+    },
+    { "command": "git diff --check", "exitCode": 0, "result": "PASS_WITH_LINE_ENDING_WARNINGS" },
+    {
+      "command": "docker version",
+      "exitCode": 1,
+      "result": "ENVIRONMENT_DIAGNOSTIC",
+      "output": "permission denied while trying to connect to the Docker API"
+    }
+  ]
+}

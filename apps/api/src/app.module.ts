@@ -1,8 +1,9 @@
 import { Inject, Injectable, Module, OnModuleDestroy } from "@nestjs/common";
 import { ThrottlerModule } from "@nestjs/throttler";
 import { APP_FILTER } from "@nestjs/core";
-import { loadEnv, runtimeDatabaseUrl } from "@juridico-ia/config";
+import { loadApiEnv, runtimeDatabaseUrl } from "@juridico-ia/config";
 import { IdentityController } from "./modules/platform/identity/identity.controller";
+import { HealthController } from "./modules/platform/health/health.controller";
 import { IdentityService } from "./modules/platform/identity/identity.service";
 import { createPool } from "./database/pool";
 import { ModuleSkeletonsModule } from "./modules/skeletons.module";
@@ -19,12 +20,12 @@ class PoolCloser implements OnModuleDestroy {
 
 @Module({
   imports: [ThrottlerModule.forRoot({ throttlers: [{ ttl: 60_000, limit: 60 }] }), ModuleSkeletonsModule],
-  controllers: [IdentityController],
+  controllers: [HealthController, IdentityController],
   providers: [
     {
       provide: "PG_POOL",
       useFactory: () => {
-        const env = loadEnv(process.env);
+        const env = loadApiEnv(process.env);
         const pool = createPool(runtimeDatabaseUrl(env));
         pool.on("error", () => undefined);
         return pool;
@@ -32,12 +33,12 @@ class PoolCloser implements OnModuleDestroy {
     },
     {
       provide: "COOKIE_SECURE",
-      useFactory: () => Boolean(loadEnv(process.env).COOKIE_SECURE),
+      useFactory: () => Boolean(loadApiEnv(process.env).COOKIE_SECURE),
     },
     {
       provide: IdentityService,
       useFactory: (pool: ReturnType<typeof createPool>) => {
-        const env = loadEnv(process.env);
+        const env = loadApiEnv(process.env);
         return new IdentityService(pool, new TextEncoder().encode(env.SESSION_SECRET));
       },
       inject: ["PG_POOL"],
